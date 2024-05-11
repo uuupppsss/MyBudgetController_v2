@@ -1,0 +1,67 @@
+﻿<Window x:Class="MyBudgetController.View.AddOperationWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyBudgetController.View"
+        xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
+        mc:Ignorable="d"
+        DataContext="{DynamicResource vm}"
+        Title="AddOperationWin" Height="550" Width="500">
+    <Window.Resources>
+        <vm:AddOperationWinVM x:Key="vm"/>
+    </Window.Resources>
+
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.RowSpan="2">
+
+            <TextBlock Text="Sum" Margin="5" Style="{StaticResource Fields}" />
+
+            <TextBlock Text="Type" Margin="5"  Style="{StaticResource Fields}" Height="50"/>
+
+            <TextBlock Text="Description" Margin="5" Style="{StaticResource Fields}" />
+
+            <TextBlock Text="Date"  Style="{StaticResource Fields}" />
+
+            <Button Height="60" Margin="10"  Command="{Binding AddNewType}"  >
+                <Viewbox>
+                    <TextBlock Text="Add new category" />
+                </Viewbox>
+            </Button>
+
+            <Button Height="60" Margin="10" Command="{Binding DeleteCategory}" >
+                <Viewbox>
+                    <TextBlock Text="Remove category" />
+                </Viewbox>
+            </Button>
+
+        </StackPanel>
+
+
+        <StackPanel Grid.Column="1" Grid.RowSpan="2" >
+
+            <TextBox Margin="5" Grid.Column="1" Text="{Binding Sum}"/>
+
+            <ComboBox Margin="5" Grid.Column="1" Height="50" SelectedItem="{Binding SelectedType }"  ItemsSource="{Binding OperationTypes}" />
+
+            <TextBox Margin="5" Grid.Column="1" Text="{Binding Name}"/>
+            <Viewbox Grid.Column="1" >
+                <Calendar Margin="10" SelectedDate="{Binding Date}" IsTodayHighlighted="True" />
+            </Viewbox>
+        </StackPanel>
+
+        <Button Grid.Row="1"  Width="120" Height="100"  Command="{Binding AddOperation}" BorderBrush="{x:Null}" Style="{StaticResource GlassButton}" Content="Add"/>
+
+
+    </Grid>
+</Window>

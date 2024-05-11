@@ -1,0 +1,21 @@
+﻿<Window x:Class="MyBudgetController.View.AddCategoryWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyBudgetController.View"
+        xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
+        mc:Ignorable="d"
+        DataContext="{DynamicResource vm}"
+        Title="AddCategoryWin" Height="200" Width="350">
+    <Window.Resources>
+        <vm:AddCategoryWinVM x:Key="vm"/>
+    </Window.Resources>
+        <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Text="Name" />
+            <TextBox Text="{Binding Type}"/>
+            <Button  Width="70" Height="60" BorderBrush="{x:Null}" Command="{Binding AddNewType}" Style="{StaticResource GlassButton}" Content="add" />
+        </StackPanel>
+        </Grid>
+</Window>

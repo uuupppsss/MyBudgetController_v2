@@ -1,0 +1,31 @@
+﻿<Window x:Class="MyBudgetController.View.SignInWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyBudgetController.View"
+        xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
+        mc:Ignorable="d"
+        DataContext="{DynamicResource vm}"
+        Title="Sign In" Height="450" Width="800">
+    <Window.Resources>
+        <vm:SignInVM x:Key="vm"/>
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="Sign In" HorizontalAlignment="Center"/>
+
+            <Label Content="Username" />
+            <TextBox x:Name="username_box" Text="{Binding Username,UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Content="Password" />
+            <PasswordBox x:Name="pwd_box" />
+
+            <Button Content="Sign In" Width="100" Margin="10"  Command="{Binding SignIn}"  Style="{StaticResource GlassButton}"/>
+            
+            <TextBlock HorizontalAlignment="Center">
+                <Hyperlink Command="{Binding OpenSignUp}">Don't have an account?</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>

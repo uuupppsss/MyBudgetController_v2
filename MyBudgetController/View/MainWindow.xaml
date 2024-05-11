@@ -1,0 +1,169 @@
+﻿<Window x:Class="MyBudgetController.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyBudgetController.View"
+        xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
+        xmlns:conv="clr-namespace:MyBudgetController.Convert"
+        DataContext="{DynamicResource vm}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1000" Background="#C0D9DF">
+    <Window.Resources>
+        <vm:MainWindowVM x:Key="vm"/>
+        <conv:PercentToWidthConverter x:Key="width_converter"/>
+        <conv:PercentConverter x:Key="percent_converter"/>
+        <conv:ValueConverter x:Key="value_converter"/>
+        <conv:DateConverter x:Key="date_converter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="22*"/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center">
+            <TextBlock Text="Your operations" FontSize="36" Grid.Column="1"  HorizontalAlignment="Left"  FontFamily="Cooper Black" Foreground="#FF4E5254"/>
+
+        </StackPanel>
+
+
+        <StackPanel Orientation="Vertical" Grid.Row="1"  Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,0">
+            <TextBlock Text="Period:" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+
+                <TextBlock Text="Год:" Margin="5"/>
+                <ComboBox ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" />
+
+
+                <TextBlock Text="Месяц:" Margin="5"/>
+                <ComboBox ItemsSource="{Binding Months}" SelectedItem="{Binding SelectedMonth}"/>
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Balance:"  FontSize="10"/>
+                <TextBlock Text="{Binding Balance,Converter={StaticResource value_converter},UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <TextBlock />
+        </StackPanel>
+
+        <TabControl Grid.Row="2" >
+            <TabItem x:Name="Expences" >
+                <TabItem.Header>
+                    <TextBlock Text="Expences" Width="350"/>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding ReportItems_E}" Margin="5,5,0,5" x:Name="VisualReportList_E" BorderBrush="{x:Null}" Background="{x:Null}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding TypeName}" Width="155" FontSize="25"/>
+                                    <Grid>
+                                        <Rectangle Fill="Beige" Width="{Binding Percent,Converter={StaticResource width_converter}}"/>
+                                        <Label Content="{Binding Value,Converter={StaticResource value_converter}}" />
+                                    </Grid>
+                                    <Label Content="{Binding Percent,Converter={StaticResource percent_converter}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    
+                    <ListBox  ItemsSource="{Binding FilteredCollection_E}" SelectedItem="{Binding SelectedVal}" Margin="5,5,0,5" Name="ExpencesList" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Height="100">
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="{Binding Type}" Height="50" FontSize="40"/>
+                                        <Label Content="{Binding Name}" Height="50" FontSize="25"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
+                                        <Label Content="{Binding Date, Converter={StaticResource date_converter}}" Height="50" FontSize="25"/>
+                                    </StackPanel>
+                                    <TextBlock >
+                                            <Hyperlink Foreground="red" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
+RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >Delete</Hyperlink>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Grid.Row="1"  Width="65" Height="50"  Command="{Binding AddNewExpence}" BorderBrush="{x:Null}" Style="{StaticResource GlassButton}" Content="add" />
+                </Grid>
+            </TabItem>
+            
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Incomes" Width="350"/>
+                </TabItem.Header>
+                <Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <ListBox Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding ReportItems_I}" Margin="5,5,0,5" x:Name="VisualReportList_I" BorderBrush="{x:Null}" Background="{x:Null}">
+                            <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding TypeName}" Width="155" FontSize="25"/>
+                                    <Grid>
+                                        <Rectangle Fill="Beige" Width="{Binding Percent,Converter={StaticResource width_converter}}"/>
+                                        <Label Content="{Binding Value,Converter={StaticResource value_converter}}" />
+                                    </Grid>
+                                    <Label Content="{Binding Percent,Converter={StaticResource percent_converter}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <ListBox  ItemsSource="{Binding FilteredCollection_I}" SelectedItem="{Binding SelectedVal}" Margin="5,5,0,5" Name="IncomesList" Background="{x:Null}" BorderBrush="{x:Null}">
+                                                    <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Height="100">
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="{Binding Type}" Height="50" FontSize="40"/>
+                                        <Label Content="{Binding Name}" Height="50" FontSize="25"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
+                                        <Label Content="{Binding Date, Converter={StaticResource date_converter}}" Height="50" FontSize="25"/>
+                                    </StackPanel>
+                                        <TextBlock>
+                                            <Hyperlink Foreground="Red" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
+RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >Delete</Hyperlink>
+                                        </TextBlock>
+                                    </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Grid.Row="1" Width="65" Height="50"  Command="{Binding AddNewIncome}" BorderBrush="{x:Null}" Style="{StaticResource GlassButton}" Content="add" />
+                    </Grid>
+
+
+                </Grid>
+
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

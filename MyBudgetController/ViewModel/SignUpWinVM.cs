@@ -7,17 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
+using MyBudgetController.View;
 
 namespace MyBudgetController.ViewModel
 {
-    public class SignUpVM : BaseVM
+    public class SignUpWinVM : BaseVM
     {
         public CommandVM SignUp { get; }
 
         public bool IsUsernameMessageVisible { get; set; }
-        public bool IsPasswordMessageVisible { get; set; }
         public string Message_username => IsUsernameMessageVisible ? "This username is already exist" : "";
-        public string Message_pwd => IsPasswordMessageVisible ? "PasswordMismatching" : "";
 
         private string _username;
         public string Username
@@ -34,7 +33,17 @@ namespace MyBudgetController.ViewModel
             }
         }
 
+        PasswordBox pwd_box;
+        PasswordBox repeatpwd_box;
+        internal void SetPassBox(PasswordBox pwd_box)
+        {
+            this.pwd_box = pwd_box;
+        }
 
+        internal void SetRepeatPassBox(PasswordBox pwd_box)
+        {
+            this.repeatpwd_box = pwd_box;
+        }
 
         private string _password;
         public string Password
@@ -46,7 +55,7 @@ namespace MyBudgetController.ViewModel
                 {
                     _password = value;
                     Signal(nameof(Password));
-                    IfPasswordMatch();
+              
                 }
             }
         }
@@ -61,14 +70,13 @@ namespace MyBudgetController.ViewModel
                 {
                     _repeatpassword = value;
                     Signal(nameof(RepeatPassword));
-                    IfPasswordMatch();
+
                 }
             }
         }
 
-        public SignUpVM()
+        public SignUpWinVM()
         {
-
 
             SignUp = new CommandVM(() =>
             {
@@ -81,6 +89,8 @@ namespace MyBudgetController.ViewModel
                 {
                     if (UserManager.SignUpMethod(Password, Username))
                     {
+                        MainWindow mainwin = new MainWindow();
+                        mainwin.Show();
                         Window win = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
                         win?.Close();
                     }
@@ -88,12 +98,6 @@ namespace MyBudgetController.ViewModel
             });
         }
 
-        public void IfPasswordMatch()
-        {
-            IsPasswordMessageVisible = Password != RepeatPassword;
-            Signal(nameof(IsPasswordMessageVisible));
-            Signal(nameof(Message_pwd));
-        }
 
         public void IfUserExist()
         {
@@ -110,18 +114,6 @@ namespace MyBudgetController.ViewModel
             Signal(nameof(IsUsernameMessageVisible));
             Signal(nameof(Message_username));
 
-        }
-
-        PasswordBox pwd_box;
-        PasswordBox repeatpwd_box;
-        internal void SetPassBox(PasswordBox pwd_box)
-        {
-            this.pwd_box = pwd_box;
-        }
-
-        internal void SetRepeatPassBox(PasswordBox pwd_box)
-        {
-            this.repeatpwd_box = pwd_box;
         }
 
     }

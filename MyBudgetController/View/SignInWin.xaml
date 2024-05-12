@@ -9,7 +9,7 @@
         DataContext="{DynamicResource vm}"
         Title="Sign In" Height="450" Width="800">
     <Window.Resources>
-        <vm:SignInVM x:Key="vm"/>
+        <vm:SignInWinVM x:Key="vm"/>
     </Window.Resources>
     <Grid>
         <StackPanel>

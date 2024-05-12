@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyBudgetController.Model;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -12,8 +13,16 @@ namespace MyBudgetController.Convert
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            string currency = "";
+            AccountManager accountManager = AccountManager.Instance;
             double result = double.Parse(value.ToString());
-            return $"{result.ToString("#,#", CultureInfo.InvariantCulture)} ₽";
+            Account account = accountManager.SelectedAccount;
+            if (account == null)
+                currency = accountManager.Accounts[0].Currency;
+            else
+                currency = account.Currency;
+            
+            return $"{result.ToString("#,#", CultureInfo.InvariantCulture)} {currency}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -85,6 +85,8 @@
     <Compile Include="Convert\PercentConverter.cs" />
     <Compile Include="Convert\PercentToWidthConverter.cs" />
     <Compile Include="Convert\ValueConverter.cs" />
+    <Compile Include="Model\Account.cs" />
+    <Compile Include="Model\AccountManager.cs" />
     <Compile Include="Model\CategoriesManager.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\DBConnection.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserManager.cs" />
     <Compile Include="ViewModel\AddCategoryWinVM.cs" />
+    <Compile Include="ViewModel\AddNewAccountWinVM.cs" />
     <Compile Include="ViewModel\AddOperationWinVM.cs" />
     <Compile Include="ViewModel\BaseVM.cs" />
     <Compile Include="ViewModel\CommandVM.cs" />
@@ -105,6 +108,9 @@
     <Compile Include="ViewModel\SignUpWinVM.cs" />
     <Compile Include="View\AddCategoryWin.xaml.cs">
       <DependentUpon>AddCategoryWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddNewAccountWin.xaml.cs">
+      <DependentUpon>AddNewAccountWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\AddOperationWin.xaml.cs">
       <DependentUpon>AddOperationWin.xaml</DependentUpon>
@@ -119,6 +125,10 @@
       <DependentUpon>SignUpWin.xaml</DependentUpon>
     </Compile>
     <Page Include="View\AddCategoryWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AddNewAccountWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

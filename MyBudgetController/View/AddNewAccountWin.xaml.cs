@@ -1,5 +1,4 @@
-﻿using MyBudgetController.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,17 +15,13 @@ using System.Windows.Shapes;
 namespace MyBudgetController.View
 {
     /// <summary>
-    /// Логика взаимодействия для SignInWin.xaml
+    /// Логика взаимодействия для AddNewAccountWin.xaml
     /// </summary>
-    public partial class SignInWin : Window
+    public partial class AddNewAccountWin : Window
     {
-        public SignInWin()
+        public AddNewAccountWin()
         {
             InitializeComponent();
-            pwd_box.PasswordChar = '*';
-            pwd_box.MaxLength = 50;
-            username_box.MaxLength = 50;
-            ((SignInWinVM)DataContext).SetPassBox(pwd_box);
         }
     }
 }

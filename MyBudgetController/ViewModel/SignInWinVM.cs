@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class SignInVM : BaseVM
+    public class SignInWinVM : BaseVM
     {
         UserManager umanager;
 
@@ -47,14 +47,17 @@ namespace MyBudgetController.ViewModel
         public CommandVM OpenSignUp { get; }
         public CommandVM SignIn { get; }
 
-        public SignInVM()
+        public SignInWinVM()
         {
             umanager = UserManager.Instance;
 
             OpenSignUp = new CommandVM(() =>
             {
                 SignUpWin win = new SignUpWin();
-                win.ShowDialog();
+                win.Show();
+                Window thiswin = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
+                thiswin?.Close();
+
             });
 
             SignIn = new CommandVM(() =>

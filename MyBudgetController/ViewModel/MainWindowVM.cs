@@ -75,6 +75,10 @@ namespace MyBudgetController.ViewModel
         public CommandVM AddNewIncome { get; }
         public CommandVM FilterCommand { get; }
         public CommandVM<Operation> RemoveCommand { get; }
+        public CommandVM LogOutCommand { get; } 
+        public CommandVM AddNewAccount { get; }
+        public CommandVM RemoveAccountCommand { get; }
+
         public Operation SelectedVal { get; set; }
 
         private ObservableCollection<Operation> _filteredCollectionE;
@@ -119,6 +123,32 @@ namespace MyBudgetController.ViewModel
                 Signal();
             }
         }
+        private ObservableCollection<Account> accounts;
+
+        public ObservableCollection<Account> Accounts
+        {
+            get => accounts;
+            set
+            {
+                accounts= value;
+                Signal();
+            }
+        }
+
+        private Account selectedaccount;
+
+        public Account SelectedAccount
+        {
+            get => selectedaccount;
+            set
+            {
+                selectedaccount = value;
+                Signal();
+                AccountChanged();
+            }
+
+        }
+
 
         private double balance;
         public double Balance
@@ -131,30 +161,28 @@ namespace MyBudgetController.ViewModel
             }
         }
 
-        private int [] filter_date;
-
-        public int [] Filter_Date
-        {
-            get => filter_date;
-            set
-            {
-                filter_date = value;
-                Signal();
-            }
-        }
 
         OperationManager operationManager = OperationManager.Instance;
+        UserManager userManager = UserManager.Instance;
+        AccountManager accountManager = AccountManager.Instance;
 
         public MainWindowVM()
         {
 
+            accountManager.GetAccounts();
+            Accounts=accountManager.Accounts;
+            SelectedAccount = Accounts[0];
+            accountManager.SelectedAccount = SelectedAccount;
+
             Months = FilterManager.GetMonths();
             Years = FilterManager.GetYears();
+
             SelectedYear = DateTime.Now.Year;
             SelectedMonth = Months[DateTime.Now.Month];
- 
-            FilteredCollection_E.CollectionChanged+= ExpencesCollection_CollectionChanged;
+
+            FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
             FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
+
 
             AddNewExpence = new CommandVM(() =>
             {
@@ -179,24 +207,80 @@ namespace MyBudgetController.ViewModel
                     operationManager.RemoveOperation(s);
                 }
             });
+
+            LogOutCommand = new CommandVM(() =>
+            {
+            var dialogresult = MessageBox.Show("Are you shure you want to log out?", "Log out", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dialogresult == MessageBoxResult.Yes)
+                { 
+                    userManager.CurrentUser = null;
+                    SignInWin signInWin = new SignInWin();
+                    signInWin.Show();
+                    Window win = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
+                    win?.Close();
+
+                }
+            });
+
+            AddNewAccount = new CommandVM(() =>
+            {
+                AddNewAccountWin win = new AddNewAccountWin();
+                win.ShowDialog();
+            });
+
+            RemoveAccountCommand = new CommandVM(() =>
+            {
+                accountManager.RemoveAccount();
+                SelectedAccount = Accounts[0];
+                operationManager.GetOperations("Expences");
+                operationManager.GetOperations("Incomes");
+
+                FilteredCollection_E = operationManager.CurrentExpencesCollection;
+                FilteredCollection_I = operationManager.CurrentIncomesCollection;
+            });
         }
 
         private void ExpencesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            MessageBox.Show("Expences collection changed");
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
             Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
         }
         private void IncomesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            MessageBox.Show("Incomes collection changed");
             ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
             Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
         }
 
         private void FilterDateChanged()
         {
-            Filter_Date = new[] { SelectedYear, Array.IndexOf(Months.ToArray(), SelectedMonth) };
-            operationManager.GetOperations(Filter_Date, "Expences");
-            operationManager.GetOperations(Filter_Date, "Incomes");
+            if(SelectedMonth==null||SelectedYear==0) 
+                return;
+
+            operationManager.selected_month = Array.IndexOf(Months.ToArray(), SelectedMonth);
+            operationManager.selected_year=SelectedYear;
+
+            operationManager.GetOperations("Expences");
+            operationManager.GetOperations("Incomes");
+
+            FilteredCollection_E = operationManager.CurrentExpencesCollection;
+            FilteredCollection_I = operationManager.CurrentIncomesCollection;
+
+            ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
+            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_E);
+
+            Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
+        }
+
+        private void AccountChanged()
+        {
+            if (SelectedYear==0||SelectedMonth==null)
+                return;
+            accountManager.SelectedAccount = SelectedAccount;
+
+            operationManager.GetOperations("Expences");
+            operationManager.GetOperations("Incomes");
 
             FilteredCollection_E = operationManager.CurrentExpencesCollection;
             FilteredCollection_I = operationManager.CurrentIncomesCollection;

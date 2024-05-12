@@ -23,12 +23,16 @@
             <RowDefinition Height="22*"/>
         </Grid.RowDefinitions>
 
+            <TextBlock Text="Your operations" FontSize="36" Grid.Column="1"  HorizontalAlignment="Center"  FontFamily="Cooper Black" Foreground="#FF4E5254"/>
+        <Button Content="Log out" Width="150" HorizontalAlignment="Right" Command="{Binding  LogOutCommand}"/>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center">
-            <TextBlock Text="Your operations" FontSize="36" Grid.Column="1"  HorizontalAlignment="Left"  FontFamily="Cooper Black" Foreground="#FF4E5254"/>
+        <StackPanel Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Left">
+            <TextBlock Text="Account:"/>
+            <ComboBox Width="250" ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount}"/>
+            <Button Content="Add new account" Command="{Binding AddNewAccount}"/>
+            <Button Content="Remove current account" Command="{Binding RemoveAccountCommand}"/>
 
         </StackPanel>
-
 
         <StackPanel Orientation="Vertical" Grid.Row="1"  Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,0">
             <TextBlock Text="Period:" HorizontalAlignment="Center"/>

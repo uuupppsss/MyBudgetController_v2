@@ -25,6 +25,8 @@ namespace MyBudgetController.Model
         public ObservableCollection<Category> CurrentECategoriesCollection { get; private set; }
         public ObservableCollection<Category> CurrentICategoriesCollection { get; private set; }
 
+        OperationManager operationManager=OperationManager.Instance;
+
         public void GetCategory(string type)
         {
             DBConnection dbConnection = DBConnection.Instance;
@@ -32,7 +34,7 @@ namespace MyBudgetController.Model
             ObservableCollection<Category> categories = new ObservableCollection<Category>();
             MySqlConnection connection = dbConnection.GetConnection();
 
-            string scmd = $"SELECT Name, id FROM Categories WHERE Type='{type}' and (user_id={userManager.CurrentUser.Id} or user_id={1})";
+            string scmd = $"SELECT Name, id FROM Categories WHERE Type='{type}' and user_id={userManager.CurrentUser.Id}";
             if (connection != null)
             {
                 MySqlCommand command = new MySqlCommand(scmd, connection);
@@ -52,7 +54,7 @@ namespace MyBudgetController.Model
             switch (type)
             {
                 case "Expences": CurrentECategoriesCollection=categories; break;
-                case "Incomes": CurrentICategoriesCollection = categories; break;
+                case "Incomes": CurrentICategoriesCollection=categories; break;
                     default: MessageBox.Show($"Error", "Error", MessageBoxButton.OK); return;
             }
         }
@@ -98,7 +100,7 @@ namespace MyBudgetController.Model
                     switch (category.Type)
                     {
                         case "Expences": CurrentECategoriesCollection.Add(category); break;
-                        case "Incomes": CurrentECategoriesCollection.Add(category); break;
+                        case "Incomes": CurrentICategoriesCollection.Add(category); break;
                     }
                     MessageBox.Show($"Success", "Success", MessageBoxButton.OK);
                 }
@@ -110,32 +112,50 @@ namespace MyBudgetController.Model
         public void RemoveCategory(Category category)
         {
             MySqlConnection connection = DBConnection.Instance.GetConnection();
-            int id;
-            // замена удаляемой категории на дефолтную категорию "Другое"
-            switch (category.Type)
+            UserManager userManager = UserManager.Instance;
+            var dialogresult = MessageBox.Show("Are you shure you want to delete this category?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dialogresult == MessageBoxResult.Yes)
             {
-                case "Expences": CurrentECategoriesCollection.Remove(category); id = 13; break;
-                case "Incomes": CurrentECategoriesCollection.Remove(category); id = 15; break;
-                default: 
-                    MessageBox.Show("Error", "Error", MessageBoxButton.OK); return;
-            }
-            // пока не работает
-            string query0 = $"update table Operations set type_id={id} where type_id={category.Id} ";
-            MySqlCommand command0 = new MySqlCommand(query0, connection);
-            command0.ExecuteNonQuery();
-            command0.Dispose();
+                string check_q = $"select id from Categories where Name= 'Другое' and Type='{category.Type}' and user_id={userManager.CurrentUser.Id}";
+                MySqlCommand cmd =new MySqlCommand(check_q, connection);
+                object result= cmd.ExecuteScalar();
+                int id=int.Parse(result.ToString());
 
-            //удаление категории
-            string query = $"delete from Categories where id={category.Id}";
-            MySqlCommand command = new MySqlCommand(query, connection);
-            object result = command.ExecuteNonQuery ();
-            command.Dispose();
-            if (result != null)
-            {
+                if(category.Id==id)
+                {
+                    MessageBox.Show("You can't remove this category", "Error", MessageBoxButton.OK);
+                    return;
+                }
+                switch (category.Type)
+                {
+                    case "Expences":
+                        CurrentECategoriesCollection.Remove(category);
+                        break;
+                    case "Incomes": 
+                        CurrentICategoriesCollection.Remove(category); 
+                        break;
+                    default:
+                        MessageBox.Show("Error", "Error", MessageBoxButton.OK); return;
+                }
 
-                MessageBox.Show("Success","Success", MessageBoxButton.OK);
+                // замена удаляемой категории на дефолтную категорию "Другое"
+                string query0 = $"update Operations set type_id={id} where type_id={category.Id} ";
+                MySqlCommand command0 = new MySqlCommand(query0, connection);
+                command0.ExecuteNonQuery();
+                command0.Dispose();
+
+                //удаление категории
+                string query = $"delete from Categories where id={category.Id}";
+                MySqlCommand command = new MySqlCommand(query, connection);
+                object result1 = command.ExecuteNonQuery();
+                command.Dispose();
+                if (result1 != null)
+                {
+                    operationManager.GetOperations(category.Type);
+                    MessageBox.Show("Success", "Success", MessageBoxButton.OK);
+                }
+                else MessageBox.Show("Error", "Error", MessageBoxButton.OK);
             }
-            else MessageBox.Show("Error", "Error", MessageBoxButton.OK);
         }
 
     }

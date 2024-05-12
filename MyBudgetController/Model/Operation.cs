@@ -15,6 +15,7 @@ namespace MyBudgetController.Model
         public double Sum { get; set; }
         public DateTime Date { get; set; }
         public Category Type { get; set; }
+        public Account Account { get; set; }
 
 
         public Category SetType(int id, string type)
@@ -32,6 +33,23 @@ namespace MyBudgetController.Model
             };
             dBConnection.CloseConnection();
             return category;
+        }
+
+        public Account SetAccount(int id)
+        {
+            Account account = new Account();
+            DBConnection dBConnection = new DBConnection();
+            string query = $"select Name, Currency from Accounts where id={id}";
+            MySqlCommand command = new MySqlCommand(query, dBConnection.GetConnection());
+            MySqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                account.Name = reader.GetString(0);
+                account.Currency = reader.GetString(1);
+            }
+
+            dBConnection.CloseConnection();
+            return account;
         }
     }
 }

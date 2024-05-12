@@ -53,7 +53,6 @@ namespace MyBudgetController.Model
             if (account != null)
             {
                 //определение текущего юзера
-                //почемуто тут ошибка => int user_id = Convert.ToInt32(account);
                 int.TryParse(account.ToString(), out int user_id);
                 GetCurrentUser(username, user_id);
 
@@ -86,6 +85,7 @@ namespace MyBudgetController.Model
 
         public static bool SignUpMethod(string _pwd, string username)
         {
+            UserManager userManager = UserManager.Instance;
             DBConnection dbConnection = DBConnection.Instance;
 
             if (_pwd == null || username == null)
@@ -110,14 +110,31 @@ namespace MyBudgetController.Model
                 MySqlCommand command2 = new MySqlCommand(query_2, dbConnection.GetConnection());
                 result = command2.ExecuteNonQuery();
                 command2.Dispose();
-
             }
             else MessageBox.Show("Check your username", "Error", MessageBoxButton.OK);
 
             if (result == 1)
             {
-                MessageBox.Show("You have successfully signed up", "Success", MessageBoxButton.OK);
+                MySqlCommand cmd = new MySqlCommand(query_1, dbConnection.GetConnection());
+                object res = cmd.ExecuteScalar();
+                cmd.Dispose();
+                int user_id = int.Parse(res.ToString());
+                userManager.GetCurrentUser(username, user_id);
+
+                string q = $"insert into Categories (Name, Type, user_id) values ('Другое', 'Expences', {user_id} ), ('Другое', 'Incomes', {user_id} )";
+                MySqlCommand command = new MySqlCommand(q, dbConnection.GetConnection());
+                command.ExecuteNonQuery();
+                command.Dispose();
+
+                string q2 = $"insert into Accounts (Name, Currency, user_id) values ('Ocновной', '₽', {user_id} )";
+                MySqlCommand command2 = new MySqlCommand(q2, dbConnection.GetConnection());
+                command2.ExecuteNonQuery();
+                command2.Dispose();
+
+                MessageBox.Show($"Hello, {userManager.CurrentUser.Username}! You have successfully signed up", "Success", MessageBoxButton.OK);
+
                 return true;
+
             }
             else
             {

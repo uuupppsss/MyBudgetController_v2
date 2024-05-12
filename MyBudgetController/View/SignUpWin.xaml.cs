@@ -28,8 +28,8 @@ namespace MyBudgetController.View
             pwd_box.MaxLength = 50;
             username_box.MaxLength = 50;
             repeatpwd_box.MaxLength = 50;
-            ((SignUpVM)DataContext).SetPassBox(pwd_box);
-            ((SignUpVM)DataContext).SetRepeatPassBox(repeatpwd_box);
+            ((SignUpWinVM)DataContext).SetPassBox(pwd_box);
+            ((SignUpWinVM)DataContext).SetRepeatPassBox(repeatpwd_box);
         }
     }
 }

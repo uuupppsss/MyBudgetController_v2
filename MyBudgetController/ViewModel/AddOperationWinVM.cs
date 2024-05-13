@@ -29,10 +29,13 @@ namespace MyBudgetController.ViewModel
             CategoriesManager categoriesManager=CategoriesManager.Instance;
             Date = DateTime.Now;
             categoriesManager.GetCategory(type);
-            if(type=="Expences")
-                OperationTypes=categoriesManager.CurrentECategoriesCollection;
+            if (type == "Expences")
+                OperationTypes = categoriesManager.CurrentECategoriesCollection;
+            
             if(type== "Incomes")
                 OperationTypes=categoriesManager.CurrentICategoriesCollection;
+
+            SelectedType = OperationTypes[0];
 
             AddNewType = new CommandVM(() =>
             {

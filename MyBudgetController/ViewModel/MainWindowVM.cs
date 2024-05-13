@@ -73,7 +73,6 @@ namespace MyBudgetController.ViewModel
 
         public CommandVM AddNewExpence { get; }
         public CommandVM AddNewIncome { get; }
-        public CommandVM FilterCommand { get; }
         public CommandVM<Operation> RemoveCommand { get; }
         public CommandVM LogOutCommand { get; } 
         public CommandVM AddNewAccount { get; }
@@ -228,19 +227,23 @@ namespace MyBudgetController.ViewModel
             {
                 accountManager.RemoveAccount();
                 SelectedAccount = Accounts[0];
-                Filter();
+                DataUpdate();
+                operationManager.GetOperations("Incomes");
+
+                FilteredCollection_E = operationManager.CurrentExpencesCollection;
+                FilteredCollection_I = operationManager.CurrentIncomesCollection;
             });
         }
 
         private void ExpencesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            MessageBox.Show("Expences collection changed");
+           // MessageBox.Show("Expences collection changed");
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
             Balance = FilterManager.GetBalance();
         }
         private void IncomesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            MessageBox.Show("Incomes collection changed");
+           // MessageBox.Show("Incomes collection changed");
             ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
             Balance = FilterManager.GetBalance();
         }
@@ -251,38 +254,18 @@ namespace MyBudgetController.ViewModel
                 return;
 
             operationManager.selected_month = Array.IndexOf(Months.ToArray(), SelectedMonth);
-            operationManager.selected_year = SelectedYear;
-            Filter();
-        }
+            operationManager.selected_year=SelectedYear;
 
-        private void Filter()
-        {
             operationManager.GetOperations("Expences");
             operationManager.GetOperations("Incomes");
 
-            if (FilteredCollection_E != null)
-            {
-                FilteredCollection_E.Clear();
-                foreach (var c in operationManager.CurrentExpencesCollection)
-                    FilteredCollection_E.Add(c);
+            FilteredCollection_E = operationManager.CurrentExpencesCollection;
+            FilteredCollection_I = operationManager.CurrentIncomesCollection;
 
-                FilteredCollection_I.Clear();
-                foreach (var c in operationManager.CurrentIncomesCollection)
-                    FilteredCollection_I.Add(c);
-            }
-            else
-            {
-                FilteredCollection_E = operationManager.CurrentExpencesCollection;
-                FilteredCollection_I = operationManager.CurrentIncomesCollection;
-
-
-                FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
-                FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
-            }
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
-            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
+            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_E);
 
-            Balance = FilterManager.GetBalance();
+            Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
         }
 
         private void AccountChanged()
@@ -291,7 +274,16 @@ namespace MyBudgetController.ViewModel
                 return;
             accountManager.SelectedAccount = SelectedAccount;
 
-            Filter();
+            operationManager.GetOperations("Expences");
+            operationManager.GetOperations("Incomes");
+
+            FilteredCollection_E = operationManager.CurrentExpencesCollection;
+            FilteredCollection_I = operationManager.CurrentIncomesCollection;
+
+            ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
+            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
+
+            Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
         }
     }
 }

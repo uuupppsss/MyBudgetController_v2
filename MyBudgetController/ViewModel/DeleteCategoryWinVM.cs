@@ -26,6 +26,8 @@ namespace MyBudgetController.ViewModel
             if (type == "Incomes")
                 Categories = categoriesManager.CurrentICategoriesCollection;
 
+            Categories.RemoveAt(0);
+
             DeleteCommand = new CommandVM(() =>
             {
                 categoriesManager.RemoveCategory(SelectedCategory);

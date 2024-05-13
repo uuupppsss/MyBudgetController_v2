@@ -76,8 +76,8 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="{Binding TypeName}" Width="155" FontSize="25"/>
                                     <Grid>
-                                        <Rectangle Fill="#B0E0E6" Width="{Binding Percent,Converter={StaticResource width_converter}}" HorizontalAlignment="Left"/>
-                                        <Label Content="{Binding Value,Converter={StaticResource value_converter}}" HorizontalAlignment="Left" />
+                                        <Rectangle Fill="#C0D9DF" Width="{Binding Percent,Converter={StaticResource width_converter}}" HorizontalAlignment="Left" Height="40"/>
+                                        <Label Content="{Binding Value,Converter={StaticResource value_converter}}" />
                                     </Grid>
                                     <Label Content="{Binding Percent,Converter={StaticResource percent_converter}}" />
                                 </StackPanel>
@@ -99,7 +99,7 @@
                                         <Label Content="{Binding Date, Converter={StaticResource date_converter}}" Height="50" FontSize="25"/>
                                     </StackPanel>
                                     <TextBlock >
-                                            <Hyperlink Foreground="#B0E0E6" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
+                                            <Hyperlink Foreground="red" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >Delete</Hyperlink>
                                     </TextBlock>
                                 </StackPanel>
@@ -128,38 +128,38 @@ RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWind
 
                         <ListBox Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding ReportItems_I}" Margin="5,5,0,5" x:Name="VisualReportList_I" BorderBrush="{x:Null}" Background="{x:Null}">
                             <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="{Binding TypeName}" Width="155" FontSize="25"/>
-                                    <Grid>
-                                        <Rectangle Fill="Beige" Width="{Binding Percent,Converter={StaticResource width_converter}}"/>
-                                        <Label Content="{Binding Value,Converter={StaticResource value_converter}}" />
-                                    </Grid>
-                                    <Label Content="{Binding Percent,Converter={StaticResource percent_converter}}" />
-                                </StackPanel>
-                            </DataTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding TypeName}" Width="155" FontSize="25"/>
+                                        <Grid>
+                                            <Rectangle Fill="#C0D9DF" Width="{Binding Percent,Converter={StaticResource width_converter}}" HorizontalAlignment="Left" Height="40"/>
+                                            <Label Content="{Binding Value,Converter={StaticResource value_converter}}" />
+                                        </Grid>
+                                        <Label Content="{Binding Percent,Converter={StaticResource percent_converter}}" />
+                                    </StackPanel>
+                                </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
 
                         <ListBox  ItemsSource="{Binding FilteredCollection_I}" SelectedItem="{Binding SelectedVal}" Margin="5,5,0,5" Name="IncomesList" Background="{x:Null}" BorderBrush="{x:Null}">
-                                                    <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Height="100">
-                                    <StackPanel Orientation="Vertical">
-                                        <Label Content="{Binding Type}" Height="50" FontSize="40"/>
-                                        <Label Content="{Binding Name}" Height="50" FontSize="25"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Vertical">
-                                        <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
-                                        <Label Content="{Binding Date, Converter={StaticResource date_converter}}" Height="50" FontSize="25"/>
-                                    </StackPanel>
-                                        <TextBlock>
-                                            <Hyperlink Foreground="Red" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Height="100">
+                                        <StackPanel Orientation="Vertical">
+                                            <Label Content="{Binding Type}" Height="50" FontSize="40"/>
+                                            <Label Content="{Binding Name}" Height="50" FontSize="25"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
+                                            <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
+                                            <Label Content="{Binding Date, Converter={StaticResource date_converter}}" Height="50" FontSize="25"/>
+                                        </StackPanel>
+                                        <TextBlock >
+                                            <Hyperlink Foreground="#C0D9DF" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >Delete</Hyperlink>
                                         </TextBlock>
                                     </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
                         </ListBox>
                         <Button Grid.Row="1" Width="65" Height="50"  Command="{Binding AddNewIncome}" BorderBrush="{x:Null}" Style="{StaticResource GlassButton}" Content="add" />
                     </Grid>

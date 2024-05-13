@@ -31,5 +31,15 @@ namespace MyBudgetController.View
             ((SignUpWinVM)DataContext).SetPassBox(pwd_box);
             ((SignUpWinVM)DataContext).SetRepeatPassBox(repeatpwd_box);
         }
+
+        private void PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            string message;
+            if (pwd_box.Password != repeatpwd_box.Password)
+            {
+                PasswordMessage.Text = "Password mismatching";
+            }
+            else PasswordMessage.Text = "";
+        }
     }
 }

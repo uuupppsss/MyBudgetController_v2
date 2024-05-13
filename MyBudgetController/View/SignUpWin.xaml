@@ -23,7 +23,7 @@
             <PasswordBox x:Name="pwd_box"/>
 
             <Label Content="Repeat Password"/>
-            <PasswordBox x:Name="repeatpwd_box" />
+            <PasswordBox x:Name="repeatpwd_box" PasswordChanged="PasswordChanged"/>
             <TextBlock x:Name="PasswordMessage" />
 
             <Button Content="Sign Up" Width="100" Margin="10" Command="{Binding SignUp}"/>

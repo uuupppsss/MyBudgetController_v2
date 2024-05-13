@@ -32,7 +32,7 @@ namespace MyBudgetController.ViewModel
             {
                 categoriesManager.RemoveCategory(SelectedCategory);
                 Window win = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
-                win?.Close();
+                win?.Close(); 
             });
         }
     }

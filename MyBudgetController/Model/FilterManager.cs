@@ -1,5 +1,6 @@
 ﻿using MySqlConnector;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -23,6 +24,27 @@ namespace MyBudgetController.Model
                     instance = new FilterManager();
                 return instance;
             }
+        }
+
+        public static double GetBalance()
+        {
+            UserManager userManager = UserManager.Instance;
+            DBConnection dBConnection = DBConnection.Instance;
+            AccountManager accountManager = AccountManager.Instance;    
+
+            string q1 = $"select sum(sum) from Operations where account_id={accountManager.SelectedAccount.Id} and type_id in(select id from Categories where Type='Expences' and user_id={userManager.CurrentUser.Id})";
+            MySqlCommand command1 = new MySqlCommand(q1, dBConnection.GetConnection());
+            object res1 = command1.ExecuteScalar();
+            double ExpencesSum = double.Parse(res1.ToString());
+            command1.Dispose();
+
+            string q2= $"select sum(sum) from Operations where account_id={accountManager.SelectedAccount.Id} and type_id in(select id from Categories where Type='Incomes' and user_id={userManager.CurrentUser.Id})";
+            MySqlCommand command2 = new MySqlCommand(q2, dBConnection.GetConnection());
+            object res2 = command2.ExecuteScalar();
+            double IncomesSum = double.Parse(res2.ToString());
+
+            return IncomesSum-ExpencesSum;
+
         }
 
         public static List<int> GetYears()

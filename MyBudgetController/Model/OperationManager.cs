@@ -148,7 +148,8 @@ namespace MyBudgetController.Model
 
                 MessageBox.Show("Success", "Success", MessageBoxButton.OK);
             }
-            else MessageBox.Show("Insert failed, try again", "Error", MessageBoxButton.OK);
+            else
+                MessageBox.Show("Insert failed, try again", "Error", MessageBoxButton.OK);
 
         }
 

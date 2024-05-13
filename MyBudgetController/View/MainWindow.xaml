@@ -76,8 +76,8 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="{Binding TypeName}" Width="155" FontSize="25"/>
                                     <Grid>
-                                        <Rectangle Fill="Beige" Width="{Binding Percent,Converter={StaticResource width_converter}}"/>
-                                        <Label Content="{Binding Value,Converter={StaticResource value_converter}}" />
+                                        <Rectangle Fill="#B0E0E6" Width="{Binding Percent,Converter={StaticResource width_converter}}" HorizontalAlignment="Left"/>
+                                        <Label Content="{Binding Value,Converter={StaticResource value_converter}}" HorizontalAlignment="Left" />
                                     </Grid>
                                     <Label Content="{Binding Percent,Converter={StaticResource percent_converter}}" />
                                 </StackPanel>
@@ -99,7 +99,7 @@
                                         <Label Content="{Binding Date, Converter={StaticResource date_converter}}" Height="50" FontSize="25"/>
                                     </StackPanel>
                                     <TextBlock >
-                                            <Hyperlink Foreground="red" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
+                                            <Hyperlink Foreground="#B0E0E6" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >Delete</Hyperlink>
                                     </TextBlock>
                                 </StackPanel>

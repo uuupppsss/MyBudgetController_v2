@@ -14,7 +14,7 @@ namespace MyBudgetController.Convert
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             double result= double.Parse(value.ToString());
-            return Math.Round(result*100)*3;
+            return Math.Round(result*100,1)*3;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -180,24 +180,20 @@ namespace MyBudgetController.ViewModel
             SelectedYear = DateTime.Now.Year;
             SelectedMonth = Months[DateTime.Now.Month];
 
-            FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
-            FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
-
-
             AddNewExpence = new CommandVM(() =>
             {
                 operationManager.CurrentOperationType = "Expences";
-                MessageBox.Show($"{operationManager.CurrentOperationType}", "You are going to add expence", MessageBoxButton.OK);
                 AddOperationWin addIWin = new AddOperationWin();
                 addIWin.ShowDialog();
+                Filter();
             });
 
             AddNewIncome = new CommandVM(() =>
             {
                 operationManager.CurrentOperationType = "Incomes";
-                MessageBox.Show($"{operationManager.CurrentOperationType}", "You are going to add an income", MessageBoxButton.OK);
                 AddOperationWin addIWin = new AddOperationWin();
                 addIWin.ShowDialog();
+                Filter();
             });
 
             RemoveCommand = new CommandVM<Operation>(s =>
@@ -232,11 +228,7 @@ namespace MyBudgetController.ViewModel
             {
                 accountManager.RemoveAccount();
                 SelectedAccount = Accounts[0];
-                operationManager.GetOperations("Expences");
-                operationManager.GetOperations("Incomes");
-
-                FilteredCollection_E = operationManager.CurrentExpencesCollection;
-                FilteredCollection_I = operationManager.CurrentIncomesCollection;
+                Filter();
             });
         }
 
@@ -244,33 +236,53 @@ namespace MyBudgetController.ViewModel
         {
             MessageBox.Show("Expences collection changed");
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
-            Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
+            Balance = FilterManager.GetBalance();
         }
         private void IncomesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             MessageBox.Show("Incomes collection changed");
             ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
-            Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
+            Balance = FilterManager.GetBalance();
         }
 
         private void FilterDateChanged()
         {
-            if(SelectedMonth==null||SelectedYear==0) 
+            if (SelectedMonth == null || SelectedYear == 0)
                 return;
 
             operationManager.selected_month = Array.IndexOf(Months.ToArray(), SelectedMonth);
-            operationManager.selected_year=SelectedYear;
+            operationManager.selected_year = SelectedYear;
+            Filter();
+        }
 
+        private void Filter()
+        {
             operationManager.GetOperations("Expences");
             operationManager.GetOperations("Incomes");
 
-            FilteredCollection_E = operationManager.CurrentExpencesCollection;
-            FilteredCollection_I = operationManager.CurrentIncomesCollection;
+            if (FilteredCollection_E != null)
+            {
+                FilteredCollection_E.Clear();
+                foreach (var c in operationManager.CurrentExpencesCollection)
+                    FilteredCollection_E.Add(c);
 
+                FilteredCollection_I.Clear();
+                foreach (var c in operationManager.CurrentIncomesCollection)
+                    FilteredCollection_I.Add(c);
+            }
+            else
+            {
+                FilteredCollection_E = operationManager.CurrentExpencesCollection;
+                FilteredCollection_I = operationManager.CurrentIncomesCollection;
+
+
+                FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
+                FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
+            }
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
-            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_E);
+            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
 
-            Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
+            Balance = FilterManager.GetBalance();
         }
 
         private void AccountChanged()
@@ -279,16 +291,7 @@ namespace MyBudgetController.ViewModel
                 return;
             accountManager.SelectedAccount = SelectedAccount;
 
-            operationManager.GetOperations("Expences");
-            operationManager.GetOperations("Incomes");
-
-            FilteredCollection_E = operationManager.CurrentExpencesCollection;
-            FilteredCollection_I = operationManager.CurrentIncomesCollection;
-
-            ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
-            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
-
-            Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
+            Filter();
         }
     }
 }

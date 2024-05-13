@@ -11,8 +11,8 @@ namespace MyBudgetController.Model
 {
     public class DBConnection
     {
-        //string dbConnect = "server=192.168.200.13;user=student;password=student;database=Operations;Character Set=utf8mb4";
-        string dbConnect = "server=localhost;user=root;database=operationsdb;port=3306;password=root;";
+        string dbConnect = "server=192.168.200.13;user=student;password=student;database=Operations;Character Set=utf8mb4";
+       // string dbConnect = "server=localhost;user=root;database=operationsdb;port=3306;password=root;";
 
         MySqlConnection connection;
 

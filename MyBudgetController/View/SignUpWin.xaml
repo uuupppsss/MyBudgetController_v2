@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
         mc:Ignorable="d"
         DataContext="{DynamicResource vm}"
-        Title="SignUp_Win" Height="500" Width="800">
+        Title="SignUp_Win" Height="550" Width="800">
     <Window.Resources>
         <vm:SignUpWinVM x:Key="vm"/>
     </Window.Resources>
@@ -26,7 +26,7 @@
             <PasswordBox x:Name="repeatpwd_box" PasswordChanged="PasswordChanged"/>
             <TextBlock x:Name="PasswordMessage" />
 
-            <Button Content="Sign Up" Width="100" Margin="10" Command="{Binding SignUp}"/>
+            <Button Content="Sign Up" Width="100" Margin="10" Command="{Binding SignUp}" Style="{StaticResource GlassButton}"/>
         </StackPanel>
     </Grid>
 </Window>

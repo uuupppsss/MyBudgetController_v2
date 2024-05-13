@@ -16,6 +16,7 @@ namespace MyBudgetController.Model
         public DateTime Date { get; set; }
         public Category Type { get; set; }
         public Account Account { get; set; }
+        public DateTime InputDate { get; set; }
 
 
         public Category SetType(int id, string type)

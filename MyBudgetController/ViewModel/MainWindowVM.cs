@@ -73,7 +73,7 @@ namespace MyBudgetController.ViewModel
 
         public CommandVM AddNewExpence { get; }
         public CommandVM AddNewIncome { get; }
-        public CommandVM<Operation> RemoveCommand { get; }
+        public CommandVM<Operation> InformCommand { get; }
         public CommandVM LogOutCommand { get; } 
         public CommandVM AddNewAccount { get; }
         public CommandVM RemoveAccountCommand { get; }
@@ -161,13 +161,14 @@ namespace MyBudgetController.ViewModel
         }
 
 
+
         OperationManager operationManager = OperationManager.Instance;
         UserManager userManager = UserManager.Instance;
         AccountManager accountManager = AccountManager.Instance;
 
         public MainWindowVM()
         {
-
+            
             accountManager.GetAccounts();
             Accounts=accountManager.Accounts;
             SelectedAccount = Accounts[0];
@@ -182,6 +183,7 @@ namespace MyBudgetController.ViewModel
             AddNewExpence = new CommandVM(() =>
             {
                 operationManager.CurrentOperationType = "Expences";
+                operationManager.CurrentOperation = null;
                 AddOperationWin addIWin = new AddOperationWin();
                 addIWin.ShowDialog();
             });
@@ -189,15 +191,19 @@ namespace MyBudgetController.ViewModel
             AddNewIncome = new CommandVM(() =>
             {
                 operationManager.CurrentOperationType = "Incomes";
+                operationManager.CurrentOperation = null;
                 AddOperationWin addIWin = new AddOperationWin();
                 addIWin.ShowDialog();
             });
 
-            RemoveCommand = new CommandVM<Operation>(s =>
+            InformCommand = new CommandVM<Operation>(s =>
             {
                 if (s != null)
                 {
-                    operationManager.RemoveOperation(s);
+                    operationManager.CurrentOperation = s;
+                    operationManager.CurrentOperationType = operationManager.CurrentOperation.Type.Type;
+                    InfoWin win = new InfoWin();
+                    win.Show();
                 }
             });
 
@@ -262,6 +268,7 @@ namespace MyBudgetController.ViewModel
                 return;
             accountManager.SelectedAccount = SelectedAccount;
             DataUpdate();
+            Balance = FilterManager.GetBalance();
 
         }
 
@@ -270,7 +277,7 @@ namespace MyBudgetController.ViewModel
             operationManager.GetOperations("Expences");
             operationManager.GetOperations("Incomes");
 
-            FilteredCollection_E = operationManager.CurrentExpencesCollection;
+            FilteredCollection_E = operationManager.CurrentExpencesCollection; ;
             FilteredCollection_I = operationManager.CurrentIncomesCollection;
 
             FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
@@ -279,7 +286,7 @@ namespace MyBudgetController.ViewModel
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
             ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
 
-            Balance = FilterManager.GetBalance();
         }
+
     }
 }

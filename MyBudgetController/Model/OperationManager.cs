@@ -1,8 +1,10 @@
-﻿using MySqlConnector;
+﻿using MyBudgetController.ViewModel;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ using System.Xml.Linq;
 
 namespace MyBudgetController.Model
 {
-    public class OperationManager
+    public class OperationManager:BaseVM
     {
         static OperationManager instance;
 
@@ -27,8 +29,22 @@ namespace MyBudgetController.Model
         public ObservableCollection<Operation> CurrentExpencesCollection { get; set; }  
         public ObservableCollection<Operation> CurrentIncomesCollection { get; set; }
         public string CurrentOperationType {  get; set; }
+
         public int selected_year { get; set; }
         public int selected_month {  get; set; }
+
+        private Operation currentOperation;
+
+        public Operation CurrentOperation
+        {
+            get => currentOperation;
+            set 
+            {
+                currentOperation = value;
+                Signal();
+            }
+        }
+
 
         public void GetOperations(string type)
         {
@@ -40,11 +56,11 @@ namespace MyBudgetController.Model
                  account = accountManager.Accounts[0];
 
             string query;
-            if (selected_month == 0) query = $"SELECT id, Name, Sum, Date, type_id, account_id " +
+            if (selected_month == 0) query = $"SELECT id, Name, Sum, Date, type_id, account_id, InputDate " +
                     $"FROM Operations WHERE user_id={userManager.CurrentUser.Id} and year(Date)={selected_year} and account_id={account.Id} and" +
                     $"Type_id in (select id from Categories where Type='{type}' and user_id={userManager.CurrentUser.Id}) order by Date desc";
 
-            else query = $"SELECT id, Name, Sum, Date, type_id, account_id " +
+            else query = $"SELECT id, Name, Sum, Date, type_id, account_id,InputDate " +
                     $"FROM Operations " +
                     $"WHERE user_id = {userManager.CurrentUser.Id} and year(Date)={selected_year} and month(Date)= {selected_month} and account_id={account.Id} and " +
                     $"Type_id in (select id from Categories where Type='{type}' and user_id={userManager.CurrentUser.Id}) order by Date desc ";
@@ -64,6 +80,7 @@ namespace MyBudgetController.Model
                         operation.Date = reader.GetDateTime(3);
                         operation.Type = operation.SetType(reader.GetInt32(4), type);
                         operation.Account = operation.SetAccount(reader.GetInt32(5));
+                        operation.InputDate = reader.GetDateTime(6);
 
                         CurrentExpencesCollection.Add(operation);
                     }
@@ -112,7 +129,7 @@ namespace MyBudgetController.Model
 
             MySqlConnection connection = dbConnection.GetConnection();
 
-                string query = $"INSERT INTO Operations (Date, Name, Type_id, Sum, user_id, account_id) VALUES (@Date, @Name, @Type_id, @Sum, @user_id,@account_id)";
+                string query = $"INSERT INTO Operations (Date, Name, Type_id, Sum, user_id, account_id, InputDate) VALUES (@Date, @Name, @Type_id, @Sum, @user_id,@account_id,@InputDate)";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Date", operation.Date);
                 command.Parameters.AddWithValue("@Name", operation.Name);
@@ -120,6 +137,7 @@ namespace MyBudgetController.Model
                 command.Parameters.AddWithValue("@Sum", operation.Sum);
                 command.Parameters.AddWithValue("@user_id", userManager.CurrentUser.Id);
                 command.Parameters.AddWithValue("@account_id", accountManager.SelectedAccount.Id);
+                command.Parameters.AddWithValue("@InputDate", operation.InputDate);
                 var result=command.ExecuteNonQuery();
                 command.Dispose();
 
@@ -137,11 +155,11 @@ namespace MyBudgetController.Model
                     switch (operation.Type.Type)
                     {
                         case "Expences":
-                            CurrentExpencesCollection.Add(operation);
+                            CurrentExpencesCollection.Insert(0,operation);
 
                             break;
                         case "Incomes":
-                            CurrentIncomesCollection.Add(operation);
+                            CurrentIncomesCollection.Insert(0, operation);
                             break;
                     }
                 }
@@ -178,6 +196,37 @@ namespace MyBudgetController.Model
                     MessageBox.Show("Error", "Error", MessageBoxButton.OK);
             }
 
+        }
+        public void UpdateOperation(Operation operation)
+        {
+            int index;
+            DBConnection dbConnection = DBConnection.Instance;
+            string query0 = $"update Operations set Name=@Name, Date=@Date, type_id=@Type_id, Sum=@Sum where id={operation.ID} ";
+            MySqlCommand command0 = new MySqlCommand(query0, dbConnection.GetConnection());
+            command0.Parameters.AddWithValue("@Date", operation.Date);
+            command0.Parameters.AddWithValue("@Name", operation.Name);
+            command0.Parameters.AddWithValue("@Type_id", operation.Type.Id);
+            command0.Parameters.AddWithValue("@Sum", operation.Sum);
+            int res=command0.ExecuteNonQuery();
+            command0.Dispose();
+            if (res != 0)
+            {
+                string type= operation.Type.Type;
+                if (type == "Expences")
+                {
+                    index = CurrentExpencesCollection.IndexOf(CurrentOperation);
+                    CurrentExpencesCollection.Insert(index, operation); 
+                }
+
+
+                if (type == "Incomes")
+                {
+                    index = CurrentIncomesCollection.IndexOf(CurrentOperation);
+                    CurrentIncomesCollection.Insert(index, operation);
+                }
+                MessageBox.Show("Success", "Success", MessageBoxButton.OK);
+            }
+                
         }
 
     }

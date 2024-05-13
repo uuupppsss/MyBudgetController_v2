@@ -1,0 +1,56 @@
+﻿<Window x:Class="MyBudgetController.View.InfoWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyBudgetController.View"
+        xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
+        xmlns:conv="clr-namespace:MyBudgetController.Convert"
+        DataContext="{DynamicResource vm}"
+        mc:Ignorable="d"
+        Title="InfoWin" Height="400" Width="500">
+    <Window.Resources>
+        <vm:InfoWinVM x:Key="vm"/>
+        <conv:DateConverter x:Key="date_converter"/>
+        <conv:ValueConverter x:Key="value_converter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="2.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions >
+            <RowDefinition Height="5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="Type"/>
+            <TextBlock Text="Sum"/>
+            <TextBlock Text="Date"/>
+            <TextBlock Text="Description"/>
+            <TextBlock Text="Account"/>
+            <TextBlock Text="Date of entry"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="{Binding Type}"/>
+            <TextBlock Text="{Binding Sum  ,Converter={StaticResource value_converter}}"/>
+            <TextBlock Text="{Binding Date, Converter={StaticResource date_converter}}"/>
+            <TextBlock Text="{Binding Name}"/>
+            <TextBlock Text="{Binding Account}"/>
+            <TextBlock Text="{Binding InsertDate ,Converter={StaticResource date_converter}}"/>
+        </StackPanel>
+
+        <Button Grid.Row="1" Command="{Binding DeleteCommand}">
+            <Viewbox>
+                <TextBlock Text="Delete operation" Foreground="White" FontSize="40" Height="50"/>
+            </Viewbox>
+        </Button>
+
+        <Button Grid.Row="1" Grid.Column="1" Command="{Binding UpdateCommand}">
+            <Viewbox>
+                <TextBlock Text="Update operation" Foreground="White" FontSize="40" Height="50"/>
+            </Viewbox>
+        </Button>
+    </Grid>
+</Window>

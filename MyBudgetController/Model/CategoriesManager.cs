@@ -121,11 +121,6 @@ namespace MyBudgetController.Model
                 object result= cmd.ExecuteScalar();
                 int id=int.Parse(result.ToString());
 
-                if(category.Id==id)
-                {
-                    MessageBox.Show("You can't remove this category", "Error", MessageBoxButton.OK);
-                    return;
-                }
                 switch (category.Type)
                 {
                     case "Expences":

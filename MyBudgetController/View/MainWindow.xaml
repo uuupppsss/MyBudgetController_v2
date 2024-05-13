@@ -14,7 +14,6 @@
         <conv:PercentToWidthConverter x:Key="width_converter"/>
         <conv:PercentConverter x:Key="percent_converter"/>
         <conv:ValueConverter x:Key="value_converter"/>
-        <conv:DateConverter x:Key="date_converter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -24,14 +23,30 @@
         </Grid.RowDefinitions>
 
             <TextBlock Text="Your operations" FontSize="36" Grid.Column="1"  HorizontalAlignment="Center"  FontFamily="Cooper Black" Foreground="#FF4E5254"/>
-        <Button Content="Log out" Width="150" HorizontalAlignment="Right" Command="{Binding  LogOutCommand}"/>
+        <Button Width="100" HorizontalAlignment="Right" Command="{Binding  LogOutCommand}">
+            <Viewbox>
+                <TextBlock Text="Log out" Foreground="White" FontSize="40" Height="50"/>
+            </Viewbox>
+        </Button>
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <TextBlock Text="Sort by:" Width="190" HorizontalAlignment="Right"/>
+            <ComboBox  Width="200" Height="50" HorizontalAlignment="Right" ItemsSource="{Binding SortTypes}" SelectedItem="{Binding SelectedSort}"/>
+        </StackPanel>
+
 
         <StackPanel Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Left">
             <TextBlock Text="Account:"/>
             <ComboBox Width="250" ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount}"/>
-            <Button Content="Add new account" Command="{Binding AddNewAccount}"/>
-            <Button Content="Remove current account" Command="{Binding RemoveAccountCommand}"/>
-
+            <Button Command="{Binding AddNewAccount}" HorizontalAlignment="Left">
+                <Viewbox>
+                    <TextBlock Text="Add new account" Foreground="White" FontSize="40" Height="50"/>
+                </Viewbox>
+            </Button>
+            <Button Command="{Binding RemoveAccountCommand}" HorizontalAlignment="Left">
+                <Viewbox>
+                    <TextBlock Text="Remove current account" Foreground="White" FontSize="40" Height="50"/>
+                </Viewbox>
+            </Button>
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Row="1"  Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,0">
@@ -90,17 +105,11 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Height="100">
-                                    <StackPanel Orientation="Vertical">
-                                        <Label Content="{Binding Type}" Height="50" FontSize="40"/>
-                                        <Label Content="{Binding Name}" Height="50" FontSize="25"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Vertical">
-                                        <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
-                                        <Label Content="{Binding Date, Converter={StaticResource date_converter}}" Height="50" FontSize="25"/>
-                                    </StackPanel>
-                                    <TextBlock >
-                                            <Hyperlink Foreground="red" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
-RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >Delete</Hyperlink>
+                                    <Label Content="{Binding Type}" Height="50" FontSize="40"/>
+                                    <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
+                                        <TextBlock >
+                                            <Hyperlink Foreground="#C0D9DF" CommandParameter="{Binding}"  Command="{Binding DataContext.InformCommand, 
+RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >See more</Hyperlink>
                                     </TextBlock>
                                 </StackPanel>
                             </DataTemplate>
@@ -145,17 +154,11 @@ RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWind
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Height="100">
-                                        <StackPanel Orientation="Vertical">
-                                            <Label Content="{Binding Type}" Height="50" FontSize="40"/>
-                                            <Label Content="{Binding Name}" Height="50" FontSize="25"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Vertical">
-                                            <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
-                                            <Label Content="{Binding Date, Converter={StaticResource date_converter}}" Height="50" FontSize="25"/>
-                                        </StackPanel>
+                                        <Label Content="{Binding Type}" Height="50" FontSize="40"/>
+                                        <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
                                         <TextBlock >
-                                            <Hyperlink Foreground="#C0D9DF" CommandParameter="{Binding}"  Command="{Binding DataContext.RemoveCommand, 
-RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >Delete</Hyperlink>
+                                            <Hyperlink Foreground="#C0D9DF" CommandParameter="{Binding}"  Command="{Binding DataContext.InformCommand, 
+RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >See more</Hyperlink>
                                         </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>

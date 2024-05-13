@@ -103,6 +103,7 @@
     <Compile Include="ViewModel\BaseVM.cs" />
     <Compile Include="ViewModel\CommandVM.cs" />
     <Compile Include="ViewModel\DeleteCategoryWinVM.cs" />
+    <Compile Include="ViewModel\InfoWinVM.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\SignInWinVM.cs" />
     <Compile Include="ViewModel\SignUpWinVM.cs" />
@@ -117,6 +118,9 @@
     </Compile>
     <Compile Include="View\DeleteCategoryWin.xaml.cs">
       <DependentUpon>DeleteCategoryWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InfoWin.xaml.cs">
+      <DependentUpon>InfoWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SignInWin.xaml.cs">
       <DependentUpon>SignInWin.xaml</DependentUpon>
@@ -137,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\DeleteCategoryWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InfoWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

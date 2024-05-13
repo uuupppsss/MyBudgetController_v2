@@ -13,7 +13,7 @@ namespace MyBudgetController.Convert
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var result=DateTime.Parse(value.ToString());
-            return result.ToString("d");
+            return result.ToString("U");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

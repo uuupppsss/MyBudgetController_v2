@@ -28,10 +28,7 @@
                 <TextBlock Text="Log out" Foreground="White" FontSize="40" Height="50"/>
             </Viewbox>
         </Button>
-        <StackPanel Grid.Row="1" Orientation="Vertical">
-            <TextBlock Text="Sort by:" Width="190" HorizontalAlignment="Right"/>
-            <ComboBox  Width="200" Height="50" HorizontalAlignment="Right" ItemsSource="{Binding SortTypes}" SelectedItem="{Binding SelectedSort}"/>
-        </StackPanel>
+        
 
 
         <StackPanel Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Left">

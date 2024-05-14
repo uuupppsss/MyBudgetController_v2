@@ -264,7 +264,7 @@ namespace MyBudgetController.ViewModel
 
         private void AccountChanged()
         {
-            if (SelectedYear==0||SelectedMonth==null)
+            if (SelectedYear==0||SelectedMonth==null|| SelectedAccount==null)
                 return;
             accountManager.SelectedAccount = SelectedAccount;
             DataUpdate();

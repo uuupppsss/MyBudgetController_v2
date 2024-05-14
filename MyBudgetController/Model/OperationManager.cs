@@ -13,7 +13,8 @@ using System.Xml.Linq;
 
 namespace MyBudgetController.Model
 {
-    public class OperationManager:BaseVM
+    public class OperationManager
+
     {
         static OperationManager instance;
 
@@ -33,17 +34,7 @@ namespace MyBudgetController.Model
         public int selected_year { get; set; }
         public int selected_month {  get; set; }
 
-        private Operation currentOperation;
-
-        public Operation CurrentOperation
-        {
-            get => currentOperation;
-            set 
-            {
-                currentOperation = value;
-                Signal();
-            }
-        }
+        public Operation CurrentOperation { get; set; }
 
 
         public void GetOperations(string type)
@@ -60,7 +51,7 @@ namespace MyBudgetController.Model
                     $"FROM Operations WHERE user_id={userManager.CurrentUser.Id} and year(Date)={selected_year} and account_id={account.Id} and" +
                     $"Type_id in (select id from Categories where Type='{type}' and user_id={userManager.CurrentUser.Id}) order by Date desc";
 
-            else query = $"SELECT id, Name, Sum, Date, type_id, account_id,InputDate " +
+            else query = $"SELECT id, Name, Sum, Date, type_id, account_id, InputDate " +
                     $"FROM Operations " +
                     $"WHERE user_id = {userManager.CurrentUser.Id} and year(Date)={selected_year} and month(Date)= {selected_month} and account_id={account.Id} and " +
                     $"Type_id in (select id from Categories where Type='{type}' and user_id={userManager.CurrentUser.Id}) order by Date desc ";
@@ -129,7 +120,7 @@ namespace MyBudgetController.Model
 
             MySqlConnection connection = dbConnection.GetConnection();
 
-                string query = $"INSERT INTO Operations (Date, Name, Type_id, Sum, user_id, account_id, InputDate) VALUES (@Date, @Name, @Type_id, @Sum, @user_id,@account_id,@InputDate)";
+                string query = $"INSERT INTO Operations (Date, Name, Type_id, Sum, user_id, account_id) VALUES (@Date, @Name, @Type_id, @Sum, @user_id,@account_id)";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Date", operation.Date);
                 command.Parameters.AddWithValue("@Name", operation.Name);
@@ -137,7 +128,6 @@ namespace MyBudgetController.Model
                 command.Parameters.AddWithValue("@Sum", operation.Sum);
                 command.Parameters.AddWithValue("@user_id", userManager.CurrentUser.Id);
                 command.Parameters.AddWithValue("@account_id", accountManager.SelectedAccount.Id);
-                command.Parameters.AddWithValue("@InputDate", operation.InputDate);
                 var result=command.ExecuteNonQuery();
                 command.Dispose();
 

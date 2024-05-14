@@ -38,16 +38,18 @@ namespace MyBudgetController.ViewModel
 
             if (operationManager.CurrentOperation == null)
             {
+                //добавление новой операции
                 SelectedType = OperationTypes[0];
                 Date = DateTime.Now;
 
                 AddOperation = new CommandVM(() =>
                 {
-                    operationManager.AddNewOperation(new Operation() { Name = Name, Sum = Sum, Date = Date, Type = SelectedType, Account = accountManager.SelectedAccount });
+                    operationManager.AddNewOperation(new Operation() { Name = Name, Sum = Sum, Date = Date, Type = SelectedType, Account = accountManager.SelectedAccount, InputDate=DateTime.Now});
                 });
             }
             else
             {
+                //перезаписываем выбранную операцию
                 Name=operationManager.CurrentOperation.Name;
                 Category category = OperationTypes.FirstOrDefault(c => c.Id == operationManager.CurrentOperation.Type.Id);
                 SelectedType = category;
@@ -55,7 +57,7 @@ namespace MyBudgetController.ViewModel
                 Date = operationManager.CurrentOperation.Date;
                 AddOperation = new CommandVM(() =>
                 {
-                    Operation operation = new Operation() { ID = operationManager.CurrentOperation.ID, Name = Name, Sum = Sum, Date = Date, Type = SelectedType, Account = accountManager.SelectedAccount };
+                    Operation operation = new Operation() { ID = operationManager.CurrentOperation.ID, Name = Name, Sum = Sum, Date = Date, Type = SelectedType, Account = accountManager.SelectedAccount, InputDate= operationManager.CurrentOperation.InputDate };
                     operationManager.UpdateOperation(operation);
                     if (type == "Expences")
                         operationManager.CurrentExpencesCollection.Remove(operationManager.CurrentOperation);
@@ -64,6 +66,8 @@ namespace MyBudgetController.ViewModel
                         operationManager.CurrentIncomesCollection.Remove(operationManager.CurrentOperation);
 
                     operationManager.CurrentOperation = operation;
+                    InfoWin infoWin = new InfoWin();
+                    infoWin.Show();
                     Window win = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
                     win?.Close();
 

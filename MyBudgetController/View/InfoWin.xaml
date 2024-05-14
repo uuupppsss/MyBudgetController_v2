@@ -33,10 +33,10 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1">
-            <TextBlock Text="{Binding Type}"/>
-            <TextBlock Text="{Binding Sum  ,Converter={StaticResource value_converter}}"/>
-            <TextBlock Text="{Binding Date, Converter={StaticResource date_converter}}"/>
-            <TextBlock Text="{Binding Name}"/>
+            <TextBlock Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="{Binding Sum, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource value_converter}}"/>
+            <TextBlock Text="{Binding Date, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource date_converter}}"/>
+            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="{Binding Account}"/>
             <TextBlock Text="{Binding InsertDate ,Converter={StaticResource date_converter}}"/>
         </StackPanel>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
@@ -19,10 +20,15 @@ namespace MyBudgetController.ViewModel
         public AddNewAccountWinVM()
         {
             Currencies = AccountManager.GetCurrencies();
+            SelectedCurrency = Currencies[0];
 
             AddCommand = new CommandVM(()=>
             {
-                accountManager.SetNewAccount(new Account { Currency = SelectedCurrency, Name = Name });
+                if (Name != null)
+                {
+                    accountManager.SetNewAccount(new Account { Currency = SelectedCurrency, Name = Name });
+                }
+                else MessageBox.Show("Please enter a name of account");
             });
         }
     }

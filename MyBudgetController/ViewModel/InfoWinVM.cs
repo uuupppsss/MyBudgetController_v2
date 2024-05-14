@@ -26,36 +26,29 @@ namespace MyBudgetController.ViewModel
         public InfoWinVM()
         {
             operationManager = OperationManager.Instance;
-            operationManager.PropertyChanged += OnOperationManagerPropertyChanged;
-            DataUpdate();
 
-            DeleteCommand = new CommandVM(()=>
-            {
-                operationManager.RemoveOperation(operationManager.CurrentOperation);
-                
-            });
-
-            UpdateCommand = new CommandVM(() =>
-            {
-                AddOperationWin addOperationWin = new AddOperationWin();
-                addOperationWin.Show();
-
-            });
-        }
-        private void OnOperationManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            MessageBox.Show("Data updating");
-                DataUpdate();
-        }
-
-        private void DataUpdate()
-        {
             Name = operationManager.CurrentOperation.Name;
             Date = operationManager.CurrentOperation.Date;
             Sum = operationManager.CurrentOperation.Sum;
             InsertDate = operationManager.CurrentOperation.InputDate;
             Account = operationManager.CurrentOperation.Account.ToString();
             Type = operationManager.CurrentOperation.Type.Name.ToString();
+
+            DeleteCommand = new CommandVM(()=>
+            {
+                operationManager.RemoveOperation(operationManager.CurrentOperation);
+                InfoWin thiswin = (InfoWin)Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
+                thiswin?.Close();
+            });
+
+            UpdateCommand = new CommandVM(() =>
+            {
+                AddOperationWin addOperationWin = new AddOperationWin();
+                addOperationWin.Show();
+                InfoWin thiswin = (InfoWin)Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
+                thiswin?.Close();
+
+            });
         }
 
     }

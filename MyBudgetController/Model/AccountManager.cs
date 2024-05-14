@@ -68,7 +68,10 @@ namespace MyBudgetController.Model
             var dialogresult = MessageBox.Show("Delete this account? All transactions on this account will also be deleted", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (dialogresult == MessageBoxResult.Yes)
             {
+                Account account=SelectedAccount;
                 SelectedAccount = Accounts[0];
+                Accounts.Remove(account);
+  
                 string q0 = $"delete from Operations where account_id={id}";
                 MySqlCommand cmd0 = new MySqlCommand(q0, dbConnection.GetConnection());
                 cmd0.ExecuteNonQuery();
@@ -82,7 +85,7 @@ namespace MyBudgetController.Model
                 cmd.Dispose();
                 if (result != 0)
                 {
-                    Accounts.Remove(SelectedAccount);
+
                     MessageBox.Show("Success");
                 }
 

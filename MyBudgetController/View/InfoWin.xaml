@@ -13,6 +13,7 @@
         <vm:InfoWinVM x:Key="vm"/>
         <conv:DateConverter x:Key="date_converter"/>
         <conv:ValueConverter x:Key="value_converter"/>
+        <conv:InputDateConverter x:Key="date_converter2"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -33,12 +34,12 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1">
-            <TextBlock Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="{Binding Sum, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource value_converter}}"/>
-            <TextBlock Text="{Binding Date, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource date_converter}}"/>
-            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="{Binding Type}"/>
+            <TextBlock Text="{Binding Sum, Converter={StaticResource value_converter}}"/>
+            <TextBlock Text="{Binding Date,  Converter={StaticResource date_converter}}"/>
+            <TextBlock Text="{Binding Name}"/>
             <TextBlock Text="{Binding Account}"/>
-            <TextBlock Text="{Binding InsertDate ,Converter={StaticResource date_converter}}"/>
+            <TextBlock Text="{Binding InsertDate ,Converter={StaticResource date_converter2}}"/>
         </StackPanel>
 
         <Button Grid.Row="1" Command="{Binding DeleteCommand}">

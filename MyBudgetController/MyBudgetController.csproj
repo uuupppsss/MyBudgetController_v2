@@ -82,6 +82,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Convert\DateConverter.cs" />
+    <Compile Include="Convert\InputDateConverter.cs" />
     <Compile Include="Convert\PercentConverter.cs" />
     <Compile Include="Convert\PercentToWidthConverter.cs" />
     <Compile Include="Convert\ValueConverter.cs" />

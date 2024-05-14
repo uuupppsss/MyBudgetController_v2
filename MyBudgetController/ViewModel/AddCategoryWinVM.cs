@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
 
 namespace MyBudgetController.ViewModel
@@ -23,7 +24,12 @@ namespace MyBudgetController.ViewModel
 
             AddNewType = new CommandVM(() =>
             {
-                categoriesManager.AddNewCategory(new Category() { Name = Type, Type=type });
+                if (Type != null)
+                {
+                    categoriesManager.AddNewCategory(new Category() { Name = Type, Type = type });
+
+                }
+                else MessageBox.Show("Please enter a name of category");
             });
         }
 

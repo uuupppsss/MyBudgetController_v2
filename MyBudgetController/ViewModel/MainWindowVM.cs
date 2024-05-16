@@ -162,13 +162,16 @@ namespace MyBudgetController.ViewModel
 
 
 
-        OperationManager operationManager = OperationManager.Instance;
-        UserManager userManager = UserManager.Instance;
-        AccountManager accountManager = AccountManager.Instance;
+        OperationManager operationManager;
+        UserManager userManager;
+        AccountManager accountManager;
 
         public MainWindowVM()
         {
-            
+            operationManager = OperationManager.Instance;
+            userManager = UserManager.Instance;
+            accountManager = AccountManager.Instance;
+
             accountManager.GetAccounts();
             Accounts=accountManager.Accounts;
             SelectedAccount = Accounts[0];

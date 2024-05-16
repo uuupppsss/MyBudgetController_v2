@@ -35,25 +35,31 @@ namespace MyBudgetController.Model
         public int selected_month {  get; set; }
 
         public Operation CurrentOperation { get; set; }
+        private DBConnection dbConnection;
+        private UserManager userManager;
+        private AccountManager accountManager;
+        private Account account;
+
 
 
         public void GetOperations(string type)
         {
-            DBConnection dbConnection = DBConnection.Instance;
-            UserManager userManager = UserManager.Instance;
-            AccountManager accountManager = AccountManager.Instance;
-            Account account=accountManager.SelectedAccount;
-            if(account==null)
+            dbConnection = DBConnection.Instance;
+            userManager = UserManager.Instance;
+            accountManager = AccountManager.Instance;
+            account = accountManager.SelectedAccount;
+
+            if (account==null)
                  account = accountManager.Accounts[0];
 
             string query;
             if (selected_month == 0) query = $"SELECT id, Name, Sum, Date, type_id, account_id, InputDate " +
-                    $"FROM Operations WHERE user_id={userManager.CurrentUser.Id} and year(Date)={selected_year} and account_id={account.Id} and" +
+                    $"FROM Operations WHERE year(Date)={selected_year} and account_id={account.Id} and" +
                     $"Type_id in (select id from Categories where Type='{type}' and user_id={userManager.CurrentUser.Id}) order by Date desc";
 
             else query = $"SELECT id, Name, Sum, Date, type_id, account_id, InputDate " +
                     $"FROM Operations " +
-                    $"WHERE user_id = {userManager.CurrentUser.Id} and year(Date)={selected_year} and month(Date)= {selected_month} and account_id={account.Id} and " +
+                    $"WHERE year(Date)={selected_year} and month(Date)= {selected_month} and account_id={account.Id} and " +
                     $"Type_id in (select id from Categories where Type='{type}' and user_id={userManager.CurrentUser.Id}) order by Date desc ";
 
             switch (type)
@@ -115,25 +121,23 @@ namespace MyBudgetController.Model
             }
             
             DBConnection dbConnection = DBConnection.Instance;
-            UserManager userManager = UserManager.Instance;
             AccountManager accountManager = AccountManager.Instance;
 
             MySqlConnection connection = dbConnection.GetConnection();
 
-                string query = $"INSERT INTO Operations (Date, Name, Type_id, Sum, user_id, account_id) VALUES (@Date, @Name, @Type_id, @Sum, @user_id,@account_id)";
+                string query = $"INSERT INTO Operations (Date, Name, Type_id, Sum, account_id) VALUES (@Date, @Name, @Type_id, @Sum,@account_id)";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Date", operation.Date);
                 command.Parameters.AddWithValue("@Name", operation.Name);
                 command.Parameters.AddWithValue("@Type_id", operation.Type.Id);
                 command.Parameters.AddWithValue("@Sum", operation.Sum);
-                command.Parameters.AddWithValue("@user_id", userManager.CurrentUser.Id);
                 command.Parameters.AddWithValue("@account_id", accountManager.SelectedAccount.Id);
                 var result=command.ExecuteNonQuery();
                 command.Dispose();
 
             if (result != 0)
             {
-                string query1 = $"select id from Operations where id=(select max(id) from Operations where user_id={userManager.CurrentUser.Id})";
+                string query1 = $"select id from Operations where id=(select max(id) from Operations where account_id={account.Id})";
                 MySqlCommand command1 = new MySqlCommand(query1, connection);
                 object result1 = command1.ExecuteScalar();
                 command.Dispose();

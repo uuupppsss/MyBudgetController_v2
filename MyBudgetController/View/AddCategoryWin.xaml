@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
         mc:Ignorable="d"
         DataContext="{DynamicResource vm}"
-        Title="AddCategoryWin" Height="250" Width="350">
+        Title="AddCategoryWin" Height="300" Width="350">
     <Window.Resources>
         <vm:AddCategoryWinVM x:Key="vm"/>
     </Window.Resources>

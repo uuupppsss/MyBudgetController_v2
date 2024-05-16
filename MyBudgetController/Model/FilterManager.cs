@@ -34,7 +34,7 @@ namespace MyBudgetController.Model
             AccountManager accountManager = AccountManager.Instance;
 
             double ExpencesSum, IncomesSum;
-            string q1 = $"select sum(sum) from Operations where account_id={accountManager.SelectedAccount.Id} and type_id in(select id from Categories where Type='Expences' and user_id={userManager.CurrentUser.Id})";
+            string q1 = $"select sum(sum) from Operations where account_id={accountManager.SelectedAccount.Id} and type_id in(select id from Categories where Type='Expences')";
             MySqlCommand command1 = new MySqlCommand(q1, dBConnection.GetConnection());
             object res1 = command1.ExecuteScalar();
             if (res1 != DBNull.Value)
@@ -44,7 +44,7 @@ namespace MyBudgetController.Model
             else ExpencesSum = 0;
             command1.Dispose();
 
-            string q2 = $"select sum(sum) from Operations where account_id={accountManager.SelectedAccount.Id} and type_id in(select id from Categories where Type='Incomes' and user_id={userManager.CurrentUser.Id})";
+            string q2 = $"select sum(sum) from Operations where account_id={accountManager.SelectedAccount.Id} and type_id in(select id from Categories where Type='Incomes')";
             MySqlCommand command2 = new MySqlCommand(q2, dBConnection.GetConnection());
             object res2 = command2.ExecuteScalar();
             if (res2 != DBNull.Value)

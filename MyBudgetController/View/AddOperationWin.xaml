@@ -25,13 +25,13 @@
 
         <StackPanel Grid.RowSpan="2">
 
-            <TextBlock Text="Sum" Margin="5" Style="{StaticResource Fields}" />
+            <TextBlock Text="Сумма" Margin="5" Style="{StaticResource Fields}" />
 
-            <TextBlock Text="Type" Margin="5"  Style="{StaticResource Fields}" Height="50"/>
+            <TextBlock Text="Категория" Margin="5"  Style="{StaticResource Fields}" Height="50"/>
 
-            <TextBlock Text="Description" Margin="5" Style="{StaticResource Fields}" />
+            <TextBlock Text="Описание" Margin="5" Style="{StaticResource Fields}" />
 
-            <TextBlock Text="Date"  Style="{StaticResource Fields}" />
+            <TextBlock Text="Дата"  Style="{StaticResource Fields}" />
 
             <Button Height="60" Margin="10"  Command="{Binding AddNewType}"  >
                 <Viewbox>
@@ -60,7 +60,7 @@
             </Viewbox>
         </StackPanel>
 
-        <Button Grid.Row="1"  Width="120" Height="100"  Command="{Binding AddOperation}" BorderBrush="{x:Null}" Style="{StaticResource GlassButton}" Content="Add"/>
+        <Button Grid.Row="1"  Width="100" Height="50"  Command="{Binding AddOperation}" BorderBrush="{x:Null}"  Content="Add"/>
 
 
     </Grid>

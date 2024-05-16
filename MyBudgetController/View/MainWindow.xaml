@@ -22,7 +22,7 @@
             <RowDefinition Height="22*"/>
         </Grid.RowDefinitions>
 
-            <TextBlock Text="Your operations" FontSize="36" Grid.Column="1"  HorizontalAlignment="Center"  FontFamily="Cooper Black" Foreground="#FF4E5254"/>
+        <TextBlock Text="Your operations" FontSize="36" Grid.Column="1"  HorizontalAlignment="Center" FontFamily="Cooper Black" Foreground="#FF4E5254" />
         <Button Width="100" HorizontalAlignment="Right" Command="{Binding  LogOutCommand}">
             <Viewbox>
                 <TextBlock Text="Log out" Foreground="White" FontSize="40" Height="50"/>
@@ -32,14 +32,14 @@
 
 
         <StackPanel Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Left">
-            <TextBlock Text="Account:"/>
+            <TextBlock Text="Счёт:"/>
             <ComboBox Width="250" ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount}"/>
-            <Button Command="{Binding AddNewAccount}" HorizontalAlignment="Left">
+            <Button Command="{Binding AddNewAccount}" HorizontalAlignment="Left" Width="200">
                 <Viewbox>
                     <TextBlock Text="Add new account" Foreground="White" FontSize="40" Height="50"/>
                 </Viewbox>
             </Button>
-            <Button Command="{Binding RemoveAccountCommand}" HorizontalAlignment="Left">
+            <Button Command="{Binding RemoveAccountCommand}" HorizontalAlignment="Left" Width="200">
                 <Viewbox>
                     <TextBlock Text="Remove current account" Foreground="White" FontSize="40" Height="50"/>
                 </Viewbox>
@@ -47,7 +47,7 @@
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Row="1"  Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,0">
-            <TextBlock Text="Period:" HorizontalAlignment="Center"/>
+            <TextBlock Text="Период:" HorizontalAlignment="Center"/>
             <StackPanel Orientation="Horizontal">
 
                 <TextBlock Text="Год:" Margin="5"/>
@@ -60,16 +60,16 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <Label Content="Balance:"  FontSize="10"/>
+                <Label Content="Баланс:"  FontSize="10"/>
                 <TextBlock Text="{Binding Balance,Converter={StaticResource value_converter},UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <TextBlock />
         </StackPanel>
 
         <TabControl Grid.Row="2" >
-            <TabItem x:Name="Expences" >
+            <TabItem x:Name="Расходы" >
                 <TabItem.Header>
-                    <TextBlock Text="Expences" Width="350"/>
+                    <TextBlock Text="Расходы" Width="350"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -112,13 +112,13 @@ RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWind
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Grid.Row="1"  Width="65" Height="50"  Command="{Binding AddNewExpence}" BorderBrush="{x:Null}" Style="{StaticResource GlassButton}" Content="add" />
+                    <Button Grid.Row="1"  Width="65" Height="50"  Command="{Binding AddNewExpence}" BorderBrush="{x:Null}"  Content="add" />
                 </Grid>
             </TabItem>
             
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Incomes" Width="350"/>
+                    <TextBlock Text="Доходы" Width="350"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid>
@@ -161,7 +161,7 @@ RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWind
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Grid.Row="1" Width="65" Height="50"  Command="{Binding AddNewIncome}" BorderBrush="{x:Null}" Style="{StaticResource GlassButton}" Content="add" />
+                        <Button Grid.Row="1" Width="65" Height="50"  Command="{Binding AddNewIncome}" BorderBrush="{x:Null}"  Content="add" />
                     </Grid>
 
 

@@ -7,26 +7,33 @@
         xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
         mc:Ignorable="d"
         DataContext="{DynamicResource vm}"
-        Title="SignUp_Win" Height="550" Width="800">
+        Title="SignUp_Win" Height="600" Width="600">
     <Window.Resources>
         <vm:SignUpWinVM x:Key="vm"/>
     </Window.Resources>
     <Grid>
         <StackPanel>
-            <TextBlock Text="Sign Up" HorizontalAlignment="Center"/>
+            <TextBlock Text="Sign Up" FontSize="36"  HorizontalAlignment="Center" FontFamily="Cooper Black" Foreground="#FF4E5254"/>
 
-            <Label Content="Username" />
-            <TextBox x:Name="username_box" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock x:Name="UsernameMessage" Text="{Binding Message_username}"/>
+            <Label Content="Логин" Width="300"/>
+            <TextBox x:Name="username_box" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Width="300"/>
+            <TextBlock x:Name="UsernameMessage" Text="{Binding Message_username}" Width="300" Height="20" FontSize="10" Foreground="Red"/>
 
-            <Label Content="Password" />
-            <PasswordBox x:Name="pwd_box"/>
+            <Label Content="Пароль" Width="300" />
+            <PasswordBox x:Name="pwd_box" Height="40" Width="300"/>
 
-            <Label Content="Repeat Password"/>
-            <PasswordBox x:Name="repeatpwd_box" PasswordChanged="PasswordChanged"/>
-            <TextBlock x:Name="PasswordMessage" />
+            <Label Content="Повторите пароль" Width="300"/>
+            <PasswordBox x:Name="repeatpwd_box" PasswordChanged="PasswordChanged"  Height="40" Width="300"/>
+            <TextBlock x:Name="PasswordMessage" Width="300"  Height="20" FontSize="10" Foreground="Red"/>
 
-            <Button Content="Sign Up" Width="100" Margin="10" Command="{Binding SignUp}" Style="{StaticResource GlassButton}"/>
+            <Button  Width="100" Margin="10" Command="{Binding SignUp}" >
+                <Viewbox>
+                    <TextBlock Text="Sign Up" FontSize="40"/>
+                </Viewbox>
+            </Button>
+            <TextBlock HorizontalAlignment="Center">
+    <Hyperlink Command="{Binding OpenSignIn}">Already have an account?</Hyperlink>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </Window>

@@ -14,6 +14,7 @@ namespace MyBudgetController.ViewModel
     public class SignUpWinVM : BaseVM
     {
         public CommandVM SignUp { get; }
+        public CommandVM OpenSignIn {  get; }
 
         public bool IsUsernameMessageVisible { get; set; }
         public string Message_username => IsUsernameMessageVisible ? "This username is already exist" : "";
@@ -95,6 +96,14 @@ namespace MyBudgetController.ViewModel
                         win?.Close();
                     }
                 }
+            });
+
+            OpenSignIn = new CommandVM(() =>
+            {
+                SignInWin win1=new SignInWin();
+                win1.Show();
+                Window win = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
+                win?.Close();
             });
         }
 

@@ -7,15 +7,21 @@
         xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
         mc:Ignorable="d"
         DataContext="{DynamicResource vm}"
-        Title="DeleteCategoryWin" Height="200" Width="300">
+        Title="DeleteCategoryWin" Height="200" Width="350">
     <Window.Resources>
         <vm:DeleteCategoryWinVM x:Key="vm"/>
     </Window.Resources>
     
     <StackPanel Orientation="Vertical">
+        <TextBlock Text="Выберите категорию для удаления" FontFamily="Cooper Black" Foreground="#FF4E5254" FontSize="17"/>
 
         <ComboBox Height="50" Margin="10" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"/>
-        <Button Margin="10" Width="100" Style="{StaticResource GlassButton}" Content="Delete" Command="{Binding DeleteCommand}"/>
-        
+        <Button Margin="10" Width="100"  Command="{Binding DeleteCommand}">
+            <Viewbox>
+                <TextBlock Text="Delete"/>
+            </Viewbox>
+                
+        </Button>
+
     </StackPanel>
 </Window>

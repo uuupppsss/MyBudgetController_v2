@@ -7,16 +7,20 @@
         xmlns:vm="clr-namespace:MyBudgetController.ViewModel"
         mc:Ignorable="d"
         DataContext="{DynamicResource vm}"
-        Title="AddNewAccountWin" Height="450" Width="800">
+        Title="AddNewAccountWin" Height="350" Width="350">
     <Window.Resources>
         <vm:AddNewAccountWinVM x:Key="vm"/>
     </Window.Resources>
     <StackPanel>
-        <TextBlock Text="Add new account"/>
-        <TextBlock Text="Name" />
+        <TextBlock Text="Добавление нового счёта" FontFamily="Cooper Black" Foreground="#FF4E5254" HorizontalAlignment="Center"/>
+        <TextBlock Text="Название" />
         <TextBox Text="{Binding Name}"/>
-        <TextBlock Text="Currency"/>
+        <TextBlock Text="Валюта"/>
         <ComboBox ItemsSource="{Binding Currencies}" SelectedItem="{Binding SelectedCurrency}"/>
-        <Button Content="add" Style="{StaticResource GlassButton}" Command="{Binding AddCommand}"/>
+        <Button Command="{Binding AddCommand}">
+            <Viewbox>
+                <TextBlock Text="Add" Foreground="Snow"/>
+            </Viewbox>
+        </Button>
     </StackPanel>
 </Window>

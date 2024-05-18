@@ -186,17 +186,13 @@ namespace MyBudgetController.ViewModel
             AddNewExpence = new CommandVM(() =>
             {
                 operationManager.CurrentOperationType = "Expences";
-                operationManager.CurrentOperation = null;
-                AddOperationWin addIWin = new AddOperationWin();
-                addIWin.ShowDialog();
+                OpenAddWin();
             });
 
             AddNewIncome = new CommandVM(() =>
             {
                 operationManager.CurrentOperationType = "Incomes";
-                operationManager.CurrentOperation = null;
-                AddOperationWin addIWin = new AddOperationWin();
-                addIWin.ShowDialog();
+                OpenAddWin();
             });
 
             InformCommand = new CommandVM<Operation>(s =>
@@ -239,18 +235,18 @@ namespace MyBudgetController.ViewModel
             });
         }
 
-        private void ExpencesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-           // MessageBox.Show("Expences collection changed");
-            ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
-            Balance = FilterManager.GetBalance();
-        }
-        private void IncomesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-           // MessageBox.Show("Incomes collection changed");
-            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
-            Balance = FilterManager.GetBalance();
-        }
+        //private void ExpencesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //   // MessageBox.Show("Expences collection changed");
+        //    ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
+        //    Balance = FilterManager.GetBalance();
+        //}
+        //private void IncomesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //   // MessageBox.Show("Incomes collection changed");
+        //    ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
+        //    Balance = FilterManager.GetBalance();
+        //}
 
         private void FilterDateChanged()
         {
@@ -262,7 +258,6 @@ namespace MyBudgetController.ViewModel
 
             DataUpdate();
 
-            Balance = ReportItems_I[0].Value - ReportItems_E[0].Value;
         }
 
         private void AccountChanged()
@@ -271,7 +266,7 @@ namespace MyBudgetController.ViewModel
                 return;
             accountManager.SelectedAccount = SelectedAccount;
             DataUpdate();
-            Balance = FilterManager.GetBalance();
+            
 
         }
 
@@ -283,12 +278,28 @@ namespace MyBudgetController.ViewModel
             FilteredCollection_E = operationManager.CurrentExpencesCollection; ;
             FilteredCollection_I = operationManager.CurrentIncomesCollection;
 
-            FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
-            FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
+            //FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
+            //FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
 
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
             ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
 
+            Balance = FilterManager.GetBalance();
+
+        }
+
+        private void OpenAddWin()
+        {
+            operationManager.CurrentOperation = null;
+            AddOperationWin addIWin = new AddOperationWin();
+            addIWin.Closed += AdddWindow_Closed;
+            addIWin.ShowDialog();
+
+        }
+
+        private void AdddWindow_Closed(object sender, EventArgs e)
+        {
+            DataUpdate();
         }
 
     }

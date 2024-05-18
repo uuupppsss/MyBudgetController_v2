@@ -97,6 +97,7 @@ namespace MyBudgetController.Model
                         operation.Date = reader1.GetDateTime(3);
                         operation.Type = operation.SetType(reader1.GetInt32(4), type);
                         operation.Account = operation.SetAccount(reader1.GetInt32(5));
+                        operation.InputDate = reader1.GetDateTime(6);
 
                         CurrentIncomesCollection.Add(operation);
                     }
@@ -209,7 +210,8 @@ namespace MyBudgetController.Model
                 if (type == "Expences")
                 {
                     index = CurrentExpencesCollection.IndexOf(CurrentOperation);
-                    CurrentExpencesCollection.Insert(index, operation); 
+                    CurrentExpencesCollection.Insert(index, operation);
+                    CurrentExpencesCollection.RemoveAt(index+1);
                 }
 
 
@@ -217,6 +219,7 @@ namespace MyBudgetController.Model
                 {
                     index = CurrentIncomesCollection.IndexOf(CurrentOperation);
                     CurrentIncomesCollection.Insert(index, operation);
+                    CurrentIncomesCollection.RemoveAt(index+1);
                 }
                 MessageBox.Show("Success", "Success", MessageBoxButton.OK);
             }

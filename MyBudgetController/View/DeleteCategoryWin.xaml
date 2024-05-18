@@ -15,7 +15,7 @@
     <StackPanel Orientation="Vertical">
         <TextBlock Text="Выберите категорию для удаления" FontFamily="Cooper Black" Foreground="#FF4E5254" FontSize="17"/>
 
-        <ComboBox Height="50" Margin="10" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"/>
+        <ComboBox Height="50" Margin="10" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" />
         <Button Margin="10" Width="100"  Command="{Binding DeleteCommand}">
             <Viewbox>
                 <TextBlock Text="Delete"/>

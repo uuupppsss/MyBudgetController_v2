@@ -29,7 +29,6 @@ namespace MyBudgetController.Model
 
         public static double GetBalance()
         {
-            UserManager userManager = UserManager.Instance;
             DBConnection dBConnection = DBConnection.Instance;
             AccountManager accountManager = AccountManager.Instance;
 

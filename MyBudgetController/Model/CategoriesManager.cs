@@ -113,25 +113,10 @@ namespace MyBudgetController.Model
         {
             MySqlConnection connection = DBConnection.Instance.GetConnection();
             UserManager userManager = UserManager.Instance;
-            var dialogresult = MessageBox.Show("Are you shure you want to delete this category?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (dialogresult == MessageBoxResult.Yes)
-            {
                 string check_q = $"select id from Categories where Name= 'Другое' and Type='{category.Type}' and user_id={userManager.CurrentUser.Id}";
                 MySqlCommand cmd =new MySqlCommand(check_q, connection);
                 object result= cmd.ExecuteScalar();
                 int id=int.Parse(result.ToString());
-
-                switch (category.Type)
-                {
-                    case "Expences":
-                        CurrentECategoriesCollection.Remove(category);
-                        break;
-                    case "Incomes": 
-                        CurrentICategoriesCollection.Remove(category); 
-                        break;
-                    default:
-                        MessageBox.Show("Error", "Error", MessageBoxButton.OK); return;
-                }
 
                 // замена удаляемой категории на дефолтную категорию "Другое"
                 string query0 = $"update Operations set type_id={id} where type_id={category.Id} ";
@@ -146,11 +131,21 @@ namespace MyBudgetController.Model
                 command.Dispose();
                 if (result1 != null)
                 {
-                    operationManager.GetOperations(category.Type);
+                    switch (category.Type)
+                    {
+                        case "Expences":
+                            CurrentECategoriesCollection.Remove(category);
+                            break;
+                        case "Incomes":
+                            CurrentICategoriesCollection.Remove(category);
+                            break;
+                        default:
+                            MessageBox.Show("Error", "Error", MessageBoxButton.OK); return;
+                    }
                     MessageBox.Show("Success", "Success", MessageBoxButton.OK);
                 }
                 else MessageBox.Show("Error", "Error", MessageBoxButton.OK);
-            }
+            
         }
 
     }

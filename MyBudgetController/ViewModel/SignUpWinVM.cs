@@ -84,9 +84,9 @@ namespace MyBudgetController.ViewModel
                 Password = pwd_box.Password;
                 RepeatPassword = repeatpwd_box.Password;
 
-                if (Password != RepeatPassword)
-                    MessageBox.Show("Password mismatching", "Error", MessageBoxButton.OK);
-                else
+
+
+                if (Password == RepeatPassword&&!IsUsernameMessageVisible)
                 {
                     if (UserManager.SignUpMethod(Password, Username))
                     {

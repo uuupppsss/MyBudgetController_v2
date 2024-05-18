@@ -56,8 +56,9 @@
 
             <TextBox Margin="5" Grid.Column="1" Text="{Binding Name}"/>
             <Viewbox Grid.Column="1" >
-                <Calendar Margin="10" SelectedDate="{Binding Date}" IsTodayHighlighted="True" />
+                <Calendar  SelectedDate="{Binding Date}" />
             </Viewbox>
+
         </StackPanel>
 
         <Button Grid.Row="1"  Width="100" Height="50"  Command="{Binding AddOperation}" BorderBrush="{x:Null}"  Content="Add"/>

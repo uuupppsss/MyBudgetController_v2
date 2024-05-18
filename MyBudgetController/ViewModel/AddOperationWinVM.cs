@@ -22,14 +22,18 @@ namespace MyBudgetController.ViewModel
 
         public CommandVM DeleteCategory { get; }
 
-
+        OperationManager operationManager;
+        CategoriesManager categoriesManager;
+        AccountManager accountManager;
+        string type;
         public AddOperationWinVM()
         {
-            string type = OperationManager.Instance.CurrentOperationType;
-            OperationManager operationManager = OperationManager.Instance;
-            CategoriesManager categoriesManager = CategoriesManager.Instance;
-            AccountManager accountManager = AccountManager.Instance;
+             type = OperationManager.Instance.CurrentOperationType;
+             operationManager = OperationManager.Instance;
+             categoriesManager = CategoriesManager.Instance;
+             accountManager = AccountManager.Instance;
             categoriesManager.GetCategory(type);
+
             if (type == "Expences")
                 OperationTypes = categoriesManager.CurrentECategoriesCollection;
 
@@ -44,7 +48,8 @@ namespace MyBudgetController.ViewModel
 
                 AddOperation = new CommandVM(() =>
                 {
-                    operationManager.AddNewOperation(new Operation() { Name = Name, Sum = Sum, Date = Date, Type = SelectedType, Account = accountManager.SelectedAccount, InputDate=DateTime.Now});
+                    Operation operation = new Operation() { Name = Name, Sum = Sum, Date = Date, Type = SelectedType, Account = accountManager.SelectedAccount, InputDate = DateTime.Now };
+                    operationManager.AddNewOperation(operation);
                 });
             }
             else
@@ -88,7 +93,8 @@ namespace MyBudgetController.ViewModel
                 DeleteCategoryWin win = new DeleteCategoryWin();
                 win.ShowDialog();
             });
-        }
 
+        }
+        
     }
 }

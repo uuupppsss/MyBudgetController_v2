@@ -19,12 +19,11 @@ namespace MyBudgetController.ViewModel
             OperationManager operationManager = OperationManager.Instance;
             CategoriesManager categoriesManager = CategoriesManager.Instance;
             string type = operationManager.CurrentOperationType;
-            categoriesManager.GetCategory(type);
 
             if (type == "Expences")
-                Categories = categoriesManager.CurrentECategoriesCollection;
+                Categories = new ObservableCollection<Category>( categoriesManager.CurrentECategoriesCollection);
             if (type == "Incomes")
-                Categories = categoriesManager.CurrentICategoriesCollection;
+                Categories = new ObservableCollection<Category>( categoriesManager.CurrentICategoriesCollection);
 
             Categories.RemoveAt(0);
 

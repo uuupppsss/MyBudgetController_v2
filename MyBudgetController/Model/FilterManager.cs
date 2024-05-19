@@ -26,8 +26,10 @@ namespace MyBudgetController.Model
                 return instance;
             }
         }
+        public double Balance;
 
-        public static double GetBalance()
+
+        public void GetBalance()
         {
             DBConnection dBConnection = DBConnection.Instance;
             AccountManager accountManager = AccountManager.Instance;
@@ -53,7 +55,7 @@ namespace MyBudgetController.Model
             else  IncomesSum = 0;
             command2.Dispose();
 
-            return IncomesSum - ExpencesSum;
+            Balance = IncomesSum - ExpencesSum;
 
         }
 

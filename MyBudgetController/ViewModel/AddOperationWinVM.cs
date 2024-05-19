@@ -71,8 +71,6 @@ namespace MyBudgetController.ViewModel
                         operationManager.CurrentIncomesCollection.Remove(operationManager.CurrentOperation);
 
                     operationManager.CurrentOperation = operation;
-                    InfoWin infoWin = new InfoWin();
-                    infoWin.Show();
                     Window win = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
                     win?.Close();
 

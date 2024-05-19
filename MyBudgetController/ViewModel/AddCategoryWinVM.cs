@@ -24,7 +24,7 @@ namespace MyBudgetController.ViewModel
 
             AddNewType = new CommandVM(() =>
             {
-                if (Type != null)
+                if (Type != ""&&Type!=null)
                 {
                     categoriesManager.AddNewCategory(new Category() { Name = Type, Type = type });
 

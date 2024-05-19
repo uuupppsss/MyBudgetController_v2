@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -161,16 +162,21 @@ namespace MyBudgetController.ViewModel
         }
 
 
-
         OperationManager operationManager;
         UserManager userManager;
         AccountManager accountManager;
+        CategoriesManager categoriesManager;
+        FilterManager filterManager;
 
         public MainWindowVM()
         {
             operationManager = OperationManager.Instance;
             userManager = UserManager.Instance;
             accountManager = AccountManager.Instance;
+            categoriesManager = CategoriesManager.Instance;
+            filterManager = FilterManager.Instance;
+
+            categoriesManager.PropertyChanged += CategoryRemoved;
 
             accountManager.GetAccounts();
             Accounts=accountManager.Accounts;
@@ -202,6 +208,7 @@ namespace MyBudgetController.ViewModel
                     operationManager.CurrentOperation = s;
                     operationManager.CurrentOperationType = operationManager.CurrentOperation.Type.Type;
                     InfoWin win = new InfoWin();
+                    win.Closed += BalanceUpdate;
                     win.Show();
                 }
             });
@@ -235,18 +242,16 @@ namespace MyBudgetController.ViewModel
             });
         }
 
-        //private void ExpencesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //   // MessageBox.Show("Expences collection changed");
-        //    ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
-        //    Balance = FilterManager.GetBalance();
-        //}
-        //private void IncomesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //   // MessageBox.Show("Incomes collection changed");
-        //    ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
-        //    Balance = FilterManager.GetBalance();
-        //}
+
+        private void ExpencesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
+        }
+
+        private void IncomesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
+        }
 
         private void FilterDateChanged()
         {
@@ -278,13 +283,14 @@ namespace MyBudgetController.ViewModel
             FilteredCollection_E = operationManager.CurrentExpencesCollection; ;
             FilteredCollection_I = operationManager.CurrentIncomesCollection;
 
-            //FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
-            //FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
+            FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
+            FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
 
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
             ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
 
-            Balance = FilterManager.GetBalance();
+            filterManager.GetBalance();
+            Balance = filterManager.Balance;
 
         }
 
@@ -292,14 +298,21 @@ namespace MyBudgetController.ViewModel
         {
             operationManager.CurrentOperation = null;
             AddOperationWin addIWin = new AddOperationWin();
-            addIWin.Closed += AdddWindow_Closed;
+            addIWin.Closed += BalanceUpdate;
             addIWin.ShowDialog();
-
         }
 
-        private void AdddWindow_Closed(object sender, EventArgs e)
+        private void BalanceUpdate(object sender, EventArgs e)
         {
-            DataUpdate();
+            Balance = filterManager.Balance;
+        }
+
+        private void CategoryRemoved(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(categoriesManager.IsRemoved)&&categoriesManager.IsRemoved)
+            {
+                DataUpdate();
+            }
         }
 
     }

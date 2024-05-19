@@ -25,14 +25,8 @@ namespace MyBudgetController.ViewModel
         OperationManager operationManager;
         public InfoWinVM()
         {
-            operationManager = OperationManager.Instance;
 
-            Name = operationManager.CurrentOperation.Name;
-            Date = operationManager.CurrentOperation.Date;
-            Sum = operationManager.CurrentOperation.Sum;
-            InsertDate = operationManager.CurrentOperation.InputDate;
-            Account = operationManager.CurrentOperation.Account.ToString();
-            Type = operationManager.CurrentOperation.Type.Name.ToString();
+            GetData();
 
             DeleteCommand = new CommandVM(()=>
             {
@@ -44,12 +38,30 @@ namespace MyBudgetController.ViewModel
             UpdateCommand = new CommandVM(() =>
             {
                 AddOperationWin addOperationWin = new AddOperationWin();
+                addOperationWin.Closed += DataUpdate;
                 addOperationWin.Show();
-                InfoWin thiswin = (InfoWin)Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
-                thiswin?.Close();
-
             });
         }
 
+        private void DataUpdate(object sender, EventArgs e)
+        {
+            operationManager = OperationManager.Instance;
+            Name = operationManager.CurrentOperation.Name;
+            Date = operationManager.CurrentOperation.Date;
+            Sum = operationManager.CurrentOperation.Sum;
+            InsertDate = operationManager.CurrentOperation.InputDate;
+            Account = operationManager.CurrentOperation.Account.ToString();
+            Type = operationManager.CurrentOperation.Type.Name.ToString();
+        }
+        private void GetData()
+        {
+            operationManager = OperationManager.Instance;
+            Name = operationManager.CurrentOperation.Name;
+            Date = operationManager.CurrentOperation.Date;
+            Sum = operationManager.CurrentOperation.Sum;
+            InsertDate = operationManager.CurrentOperation.InputDate;
+            Account = operationManager.CurrentOperation.Account.ToString();
+            Type = operationManager.CurrentOperation.Type.Name.ToString();
+        }
     }
 }

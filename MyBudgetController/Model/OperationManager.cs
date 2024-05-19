@@ -123,6 +123,7 @@ namespace MyBudgetController.Model
             
             DBConnection dbConnection = DBConnection.Instance;
             AccountManager accountManager = AccountManager.Instance;
+            FilterManager filterManager = FilterManager.Instance;
 
             MySqlConnection connection = dbConnection.GetConnection();
 
@@ -143,7 +144,7 @@ namespace MyBudgetController.Model
                 object result1 = command1.ExecuteScalar();
                 command.Dispose();
                 operation.ID = int.Parse(result1.ToString());
-
+                filterManager.GetBalance();
                 bool ifDateMatch = operation.Date.Year == selected_year && (operation.Date.Month == selected_month || selected_month == 0);
                 if (ifDateMatch)
                 {
@@ -169,6 +170,7 @@ namespace MyBudgetController.Model
         public void RemoveOperation(Operation operation)
         {
             DBConnection dbConnection = DBConnection.Instance;
+            FilterManager filterManager = FilterManager.Instance;
 
             var dialogresult = MessageBox.Show("Delete this operation?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (dialogresult == MessageBoxResult.Yes)
@@ -180,6 +182,7 @@ namespace MyBudgetController.Model
 
                 if (result != 0)
                 {
+                    filterManager.GetBalance();
                     switch (operation.Type.Type)
                     {
                         case "Expences": CurrentExpencesCollection.Remove(operation); break;
@@ -196,6 +199,7 @@ namespace MyBudgetController.Model
         {
             int index;
             DBConnection dbConnection = DBConnection.Instance;
+            FilterManager filterManager= FilterManager.Instance;
             string query0 = $"update Operations set Name=@Name, Date=@Date, type_id=@Type_id, Sum=@Sum where id={operation.ID} ";
             MySqlCommand command0 = new MySqlCommand(query0, dbConnection.GetConnection());
             command0.Parameters.AddWithValue("@Date", operation.Date);
@@ -206,6 +210,7 @@ namespace MyBudgetController.Model
             command0.Dispose();
             if (res != 0)
             {
+                filterManager.GetBalance();
                 string type= operation.Type.Type;
                 if (type == "Expences")
                 {

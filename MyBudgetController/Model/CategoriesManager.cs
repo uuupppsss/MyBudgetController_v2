@@ -1,7 +1,10 @@
-﻿using MySqlConnector;
+﻿using MyBudgetController.View;
+using MyBudgetController.ViewModel;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
@@ -10,7 +13,7 @@ using System.Windows;
 
 namespace MyBudgetController.Model
 {
-    public class CategoriesManager
+    public class CategoriesManager:INotifyPropertyChanged
     {
         static CategoriesManager instance;
         public static CategoriesManager Instance
@@ -22,10 +25,48 @@ namespace MyBudgetController.Model
                 return instance;
             }
         }
-        public ObservableCollection<Category> CurrentECategoriesCollection { get; private set; }
-        public ObservableCollection<Category> CurrentICategoriesCollection { get; private set; }
 
-        OperationManager operationManager=OperationManager.Instance;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private ObservableCollection<Category> currentECategoriesCollection;
+
+        public ObservableCollection<Category> CurrentECategoriesCollection
+        {
+            get => currentECategoriesCollection; 
+            set 
+            { 
+                currentECategoriesCollection = value;
+            }
+        }
+
+        private ObservableCollection<Category> currentICategoriesCollection;
+
+        public ObservableCollection<Category> CurrentICategoriesCollection
+        {
+            get => currentICategoriesCollection;
+            set
+            {
+                currentICategoriesCollection = value;
+            }
+        }
+
+        private bool isRemoved;
+
+        public bool  IsRemoved
+        {
+            get => isRemoved; 
+            set 
+            { 
+                isRemoved = value;
+                OnPropertyChanged(nameof(IsRemoved));
+            }
+        }
+
 
         public void GetCategory(string type)
         {
@@ -142,10 +183,10 @@ namespace MyBudgetController.Model
                         default:
                             MessageBox.Show("Error", "Error", MessageBoxButton.OK); return;
                     }
-                    MessageBox.Show("Success", "Success", MessageBoxButton.OK);
+                IsRemoved = true;
                 }
                 else MessageBox.Show("Error", "Error", MessageBoxButton.OK);
-            
+            IsRemoved = false;
         }
 
     }

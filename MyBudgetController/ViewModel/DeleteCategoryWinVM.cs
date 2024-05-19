@@ -30,7 +30,7 @@ namespace MyBudgetController.ViewModel
             DeleteCommand = new CommandVM(() =>
             {
                 var result = MessageBox.Show( "Are you shure you want to delete this category? All transactions in this category wil be updated with the default category  ", "Delete", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
+                if (result == MessageBoxResult.Yes&&SelectedCategory!=null)
                 {
                     categoriesManager.RemoveCategory(SelectedCategory);
                     Window win = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);

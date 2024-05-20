@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class AddNewAccountWinVM:BaseVM
+    public class AddNewAccountWinVM:Base
     {
         public List<string> Currencies { get; set; }
         public string SelectedCurrency { get; set; }

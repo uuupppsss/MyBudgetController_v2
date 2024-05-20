@@ -52,7 +52,7 @@
 
             <TextBox Margin="5" Grid.Column="1" Text="{Binding Sum}"/>
 
-            <ComboBox Margin="5" Grid.Column="1" Height="50" SelectedItem="{Binding SelectedType }"  ItemsSource="{Binding OperationTypes}" />
+            <ComboBox Margin="5" Grid.Column="1" Height="50" SelectedItem="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding OperationTypes}" />
 
             <TextBox Margin="5" Grid.Column="1" Text="{Binding Name}"/>
             <Viewbox Grid.Column="1" >

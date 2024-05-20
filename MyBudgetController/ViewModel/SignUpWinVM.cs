@@ -11,7 +11,7 @@ using MyBudgetController.View;
 
 namespace MyBudgetController.ViewModel
 {
-    public class SignUpWinVM : BaseVM
+    public class SignUpWinVM : Base
     {
         public CommandVM SignUp { get; }
         public CommandVM OpenSignIn {  get; }

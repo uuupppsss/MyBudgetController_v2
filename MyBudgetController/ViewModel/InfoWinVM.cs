@@ -10,14 +10,50 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class InfoWinVM:BaseVM
+    public class InfoWinVM : Base
     {
-        public string Name { get; set; }
-        public DateTime Date{ get; set; }
-        public double Sum { get; set; }
+        private string name;
+        public string Name
+        {
+            get => name;
+            set
+            {
+                name = value;
+                Signal();
+            }
+        }
+        private DateTime date;
+        public DateTime Date
+        { 
+            get => date;
+            set
+            {
+                date = value;
+                Signal();
+            }
+        }
+        private double sum;
+        public double Sum
+        {
+            get => sum;
+            set
+            {
+                sum= value;
+                Signal() ;
+            }
+        }
         public DateTime InsertDate { get; set; }
         public string Account { get; set; }
-        public string Type { get; set; }
+        private string type;
+        public string Type
+        {
+            get=>type;
+            set
+            {
+                type = value;
+                Signal();
+            }
+        }
 
         public CommandVM DeleteCommand { get;}
         public CommandVM UpdateCommand { get; }
@@ -25,7 +61,7 @@ namespace MyBudgetController.ViewModel
         OperationManager operationManager;
         public InfoWinVM()
         {
-
+            operationManager = OperationManager.Instance;
             GetData();
 
             DeleteCommand = new CommandVM(()=>
@@ -45,23 +81,20 @@ namespace MyBudgetController.ViewModel
 
         private void DataUpdate(object sender, EventArgs e)
         {
-            operationManager = OperationManager.Instance;
-            Name = operationManager.CurrentOperation.Name;
-            Date = operationManager.CurrentOperation.Date;
-            Sum = operationManager.CurrentOperation.Sum;
-            InsertDate = operationManager.CurrentOperation.InputDate;
-            Account = operationManager.CurrentOperation.Account.ToString();
-            Type = operationManager.CurrentOperation.Type.Name.ToString();
+            GetData();
         }
         private void GetData()
         {
-            operationManager = OperationManager.Instance;
-            Name = operationManager.CurrentOperation.Name;
-            Date = operationManager.CurrentOperation.Date;
-            Sum = operationManager.CurrentOperation.Sum;
-            InsertDate = operationManager.CurrentOperation.InputDate;
-            Account = operationManager.CurrentOperation.Account.ToString();
-            Type = operationManager.CurrentOperation.Type.Name.ToString();
+            if(operationManager.CurrentOperation!=null)
+            {
+                Name = operationManager.CurrentOperation.Name;
+                Date = operationManager.CurrentOperation.Date;
+                Sum = operationManager.CurrentOperation.Sum;
+                InsertDate = operationManager.CurrentOperation.InputDate;
+                Account = operationManager.CurrentOperation.Account.ToString();
+                Type = operationManager.CurrentOperation.Type.Name.ToString();
+            }
+
         }
     }
 }

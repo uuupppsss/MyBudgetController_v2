@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class MainWindowVM : BaseVM
+    public class MainWindowVM : Base
     {
         private List<string> _months;
         public List<string> Months
@@ -176,12 +176,16 @@ namespace MyBudgetController.ViewModel
             categoriesManager = CategoriesManager.Instance;
             filterManager = FilterManager.Instance;
 
-            categoriesManager.PropertyChanged += CategoryRemoved;
+            categoriesManager.CategoryRemoved += CategoryRemoved;
+            filterManager.PropertyChanged += BalanceUpdate;
+
 
             accountManager.GetAccounts();
             Accounts=accountManager.Accounts;
             SelectedAccount = Accounts[0];
             accountManager.SelectedAccount = SelectedAccount;
+
+            Accounts.CollectionChanged += SelectedAccountChanged;
 
             Months = FilterManager.GetMonths();
             Years = FilterManager.GetYears();
@@ -208,7 +212,7 @@ namespace MyBudgetController.ViewModel
                     operationManager.CurrentOperation = s;
                     operationManager.CurrentOperationType = operationManager.CurrentOperation.Type.Type;
                     InfoWin win = new InfoWin();
-                    win.Closed += BalanceUpdate;
+                    win.Closed += UnsetCurrentOperation;
                     win.Show();
                 }
             });
@@ -242,6 +246,20 @@ namespace MyBudgetController.ViewModel
             });
         }
 
+        private void SelectedAccountChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            SelectedAccount = Accounts.Last();
+        }
+
+        private void UnsetCurrentOperation(object sender, EventArgs e)
+        {
+            operationManager.CurrentOperation = null;
+        }
+
+        private void CategoryRemoved()
+        {
+            DataUpdate();
+        }
 
         private void ExpencesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -271,8 +289,6 @@ namespace MyBudgetController.ViewModel
                 return;
             accountManager.SelectedAccount = SelectedAccount;
             DataUpdate();
-            
-
         }
 
         private void DataUpdate()
@@ -280,7 +296,7 @@ namespace MyBudgetController.ViewModel
             operationManager.GetOperations("Expences");
             operationManager.GetOperations("Incomes");
 
-            FilteredCollection_E = operationManager.CurrentExpencesCollection; ;
+            FilteredCollection_E = operationManager.CurrentExpencesCollection; 
             FilteredCollection_I = operationManager.CurrentIncomesCollection;
 
             FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
@@ -289,30 +305,19 @@ namespace MyBudgetController.ViewModel
             ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
             ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
 
+            Years = FilterManager.GetYears();
             filterManager.GetBalance();
-            Balance = filterManager.Balance;
-
         }
 
         private void OpenAddWin()
         {
-            operationManager.CurrentOperation = null;
             AddOperationWin addIWin = new AddOperationWin();
-            addIWin.Closed += BalanceUpdate;
             addIWin.ShowDialog();
         }
 
         private void BalanceUpdate(object sender, EventArgs e)
         {
             Balance = filterManager.Balance;
-        }
-
-        private void CategoryRemoved(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(categoriesManager.IsRemoved)&&categoriesManager.IsRemoved)
-            {
-                DataUpdate();
-            }
         }
 
     }

@@ -9,7 +9,7 @@ using MyBudgetController.Model;
 
 namespace MyBudgetController.ViewModel
 {
-    public class DeleteCategoryWinVM:BaseVM
+    public class DeleteCategoryWinVM:Base
     {
         public ObservableCollection<Category> Categories { get; set; }
         public CommandVM DeleteCommand { get; }

@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace MyBudgetController.Model
 {
-    public class CategoriesManager:INotifyPropertyChanged
+    public class CategoriesManager
     {
         static CategoriesManager instance;
         public static CategoriesManager Instance
@@ -26,12 +26,7 @@ namespace MyBudgetController.Model
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
 
         private ObservableCollection<Category> currentECategoriesCollection;
 
@@ -55,18 +50,7 @@ namespace MyBudgetController.Model
             }
         }
 
-        private bool isRemoved;
-
-        public bool  IsRemoved
-        {
-            get => isRemoved; 
-            set 
-            { 
-                isRemoved = value;
-                OnPropertyChanged(nameof(IsRemoved));
-            }
-        }
-
+        public event Action CategoryRemoved;
 
         public void GetCategory(string type)
         {
@@ -183,10 +167,10 @@ namespace MyBudgetController.Model
                         default:
                             MessageBox.Show("Error", "Error", MessageBoxButton.OK); return;
                     }
-                IsRemoved = true;
+                CategoryRemoved.Invoke();
                 }
                 else MessageBox.Show("Error", "Error", MessageBoxButton.OK);
-            IsRemoved = false;
+            
         }
 
     }

@@ -33,7 +33,7 @@
 
         <StackPanel Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Left">
             <TextBlock Text="Счёт:"/>
-            <ComboBox Width="250" ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount}"/>
+            <ComboBox Width="250" ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Command="{Binding AddNewAccount}" HorizontalAlignment="Left" Width="200">
                 <Viewbox>
                     <TextBlock Text="Add new account" Foreground="White" FontSize="40" Height="50"/>

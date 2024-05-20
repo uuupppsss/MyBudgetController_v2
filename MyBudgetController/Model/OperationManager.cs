@@ -1,15 +1,7 @@
-﻿using MyBudgetController.ViewModel;
-using MySqlConnector;
-using System;
-using System.Collections.Generic;
+﻿using MySqlConnector;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Xml.Linq;
+
 
 namespace MyBudgetController.Model
 {
@@ -34,7 +26,8 @@ namespace MyBudgetController.Model
         public int selected_year { get; set; }
         public int selected_month {  get; set; }
 
-        public Operation CurrentOperation { get; set; }
+        public Operation CurrentOperation {  get; set; }
+
         private DBConnection dbConnection;
         private UserManager userManager;
         private AccountManager accountManager;
@@ -54,7 +47,8 @@ namespace MyBudgetController.Model
 
             string query;
             if (selected_month == 0) query = $"SELECT id, Name, Sum, Date, type_id, account_id, InputDate " +
-                    $"FROM Operations WHERE year(Date)={selected_year} and account_id={account.Id} and" +
+                    $"FROM Operations " +
+                    $"WHERE year(Date)={selected_year} and account_id={account.Id} and " +
                     $"Type_id in (select id from Categories where Type='{type}' and user_id={userManager.CurrentUser.Id}) order by Date desc";
 
             else query = $"SELECT id, Name, Sum, Date, type_id, account_id, InputDate " +
@@ -197,6 +191,16 @@ namespace MyBudgetController.Model
         }
         public void UpdateOperation(Operation operation)
         {
+            if (operation.Type == null)
+            {
+                MessageBox.Show("Select type", "Error", MessageBoxButton.OK);
+                return;
+            }
+            if (operation.Sum == 0)
+            {
+                MessageBox.Show("Input sum", "Error", MessageBoxButton.OK);
+                return;
+            }
             int index;
             DBConnection dbConnection = DBConnection.Instance;
             FilterManager filterManager= FilterManager.Instance;
@@ -216,7 +220,7 @@ namespace MyBudgetController.Model
                 {
                     index = CurrentExpencesCollection.IndexOf(CurrentOperation);
                     CurrentExpencesCollection.Insert(index, operation);
-                    CurrentExpencesCollection.RemoveAt(index+1);
+                    CurrentExpencesCollection.Remove(CurrentOperation);
                 }
 
 
@@ -224,8 +228,9 @@ namespace MyBudgetController.Model
                 {
                     index = CurrentIncomesCollection.IndexOf(CurrentOperation);
                     CurrentIncomesCollection.Insert(index, operation);
-                    CurrentIncomesCollection.RemoveAt(index+1);
+                    CurrentIncomesCollection.Remove(CurrentOperation);
                 }
+                CurrentOperation = operation;
                 MessageBox.Show("Success", "Success", MessageBoxButton.OK);
             }
                 

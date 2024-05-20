@@ -10,12 +10,21 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class AddOperationWinVM : BaseVM
+    public class AddOperationWinVM : Base
     {
         public string Name { get; set; }
         public double Sum { get; set; }
         public DateTime Date { get; set; }
-        public Category SelectedType { get; set; }
+        private Category selectedtype;
+        public Category SelectedType 
+        {
+            get => selectedtype;
+            set
+            {
+                selectedtype = value;
+                Signal();
+            }
+        }
         public ObservableCollection<Category> OperationTypes { get; set; }
         public CommandVM AddNewType { get; }
         public CommandVM AddOperation { get; }
@@ -33,6 +42,8 @@ namespace MyBudgetController.ViewModel
              categoriesManager = CategoriesManager.Instance;
              accountManager = AccountManager.Instance;
             categoriesManager.GetCategory(type);
+
+            OperationTypes.CollectionChanged += ChangeDefaultCategory;
 
             if (type == "Expences")
                 OperationTypes = categoriesManager.CurrentECategoriesCollection;
@@ -64,13 +75,7 @@ namespace MyBudgetController.ViewModel
                 {
                     Operation operation = new Operation() { ID = operationManager.CurrentOperation.ID, Name = Name, Sum = Sum, Date = Date, Type = SelectedType, Account = accountManager.SelectedAccount, InputDate= operationManager.CurrentOperation.InputDate };
                     operationManager.UpdateOperation(operation);
-                    if (type == "Expences")
-                        operationManager.CurrentExpencesCollection.Remove(operationManager.CurrentOperation);
-
-                    if (type == "Incomes")
-                        operationManager.CurrentIncomesCollection.Remove(operationManager.CurrentOperation);
-
-                    operationManager.CurrentOperation = operation;
+                    
                     Window win = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.DataContext == this);
                     win?.Close();
 
@@ -93,6 +98,10 @@ namespace MyBudgetController.ViewModel
             });
 
         }
-        
+
+        private void ChangeDefaultCategory(object sender, EventArgs e)
+        {
+            SelectedType=OperationTypes.Last();
+        }
     }
 }

@@ -25,7 +25,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -129,7 +129,7 @@
     <Compile Include="ViewModel\AddCategoryWinVM.cs" />
     <Compile Include="ViewModel\AddNewAccountWinVM.cs" />
     <Compile Include="ViewModel\AddOperationWinVM.cs" />
-    <Compile Include="ViewModel\BaseVM.cs" />
+    <Compile Include="Model\Base.cs" />
     <Compile Include="ViewModel\CommandVM.cs" />
     <Compile Include="ViewModel\DeleteCategoryWinVM.cs" />
     <Compile Include="ViewModel\InfoWinVM.cs" />

@@ -1,4 +1,5 @@
-﻿using MySqlConnector;
+﻿using MyBudgetController.ViewModel;
+using MySqlConnector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Windows;
 
 namespace MyBudgetController.Model
 {
-    public class FilterManager
+    public class FilterManager:Base
     {
         public List<int> Years { get; set; }
         public List<string> Months { get; set; }
@@ -26,7 +27,18 @@ namespace MyBudgetController.Model
                 return instance;
             }
         }
-        public double Balance;
+        private double balance;
+
+        public double Balance
+        {
+            get => balance; 
+            set
+            { 
+                balance = value;
+                Signal();
+            }
+        }
+
 
 
         public void GetBalance()
@@ -61,10 +73,10 @@ namespace MyBudgetController.Model
 
         public static List<int> GetYears()
         {
-            UserManager userManager = UserManager.Instance;
+            AccountManager accountManager= AccountManager.Instance;
             DBConnection dBConnection = DBConnection.Instance;
 
-            string query = $"select distinct year(Date) as y from Operations where user_id={userManager.CurrentUser.Id} ";
+            string query = $"select distinct year(Date) as y from Operations where account_id={accountManager.SelectedAccount.Id} ";
 
             MySqlCommand command = new MySqlCommand(query, dBConnection.GetConnection());
             MySqlDataReader reader = command.ExecuteReader();

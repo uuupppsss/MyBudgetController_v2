@@ -43,13 +43,12 @@ namespace MyBudgetController.ViewModel
              accountManager = AccountManager.Instance;
             categoriesManager.GetCategory(type);
 
-            OperationTypes.CollectionChanged += ChangeDefaultCategory;
-
             if (type == "Expences")
                 OperationTypes = categoriesManager.CurrentECategoriesCollection;
 
             if (type == "Incomes")
                 OperationTypes = categoriesManager.CurrentICategoriesCollection;
+            OperationTypes.CollectionChanged += ChangeDefaultCategory;
 
             if (operationManager.CurrentOperation == null)
             {
@@ -82,6 +81,7 @@ namespace MyBudgetController.ViewModel
                 });
 
             }
+
 
             AddNewType = new CommandVM(() =>
             {

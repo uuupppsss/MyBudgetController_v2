@@ -117,7 +117,7 @@
     <Compile Include="ViewModel\AddCategoryWinVM.cs" />
     <Compile Include="ViewModel\AddNewAccountWinVM.cs" />
     <Compile Include="ViewModel\AddOperationWinVM.cs" />
-    <Compile Include="Model\Base.cs" />
+    <Compile Include="ViewModel\BaseVM.cs" />
     <Compile Include="ViewModel\CommandVM.cs" />
     <Compile Include="ViewModel\DeleteCategoryWinVM.cs" />
     <Compile Include="ViewModel\InfoWinVM.cs" />

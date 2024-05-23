@@ -12,10 +12,22 @@ using System.Windows;
 
 namespace MyBudgetController.Model
 {
-    public class FilterManager:Base
+    public class FilterManager
     {
-        public List<int> Years { get; set; }
-        public List<string> Months { get; set; }
+        public event Action BalanceUpdate;
+        public event Action YearsChanged;
+        private List<int> years;
+
+        public List<int> Years
+        {
+            get =>years;
+            set 
+            {
+                years = value;
+                YearsChanged.Invoke();
+            }
+        }
+
 
         static FilterManager instance;
         public static FilterManager Instance
@@ -35,7 +47,7 @@ namespace MyBudgetController.Model
             set
             { 
                 balance = value;
-                Signal();
+                BalanceUpdate.Invoke();
             }
         }
 
@@ -71,7 +83,7 @@ namespace MyBudgetController.Model
 
         }
 
-        public static List<int> GetYears()
+        public void GetYears()
         {
             AccountManager accountManager= AccountManager.Instance;
             DBConnection dBConnection = DBConnection.Instance;
@@ -81,24 +93,24 @@ namespace MyBudgetController.Model
             MySqlCommand command = new MySqlCommand(query, dBConnection.GetConnection());
             MySqlDataReader reader = command.ExecuteReader();
 
-            List<int> Years = new List<int>();
+            List<int> _Years = new List<int>();
 
             while (reader.Read())
             {
-                Years.Add(reader.GetInt32(0));
+                _Years.Add(reader.GetInt32(0));
             }
 
             reader.Close();
             command.Dispose();
 
 
-            if (!Years.Contains(DateTime.Now.Year))
+            if (!_Years.Contains(DateTime.Now.Year))
             {
-                Years.Add(DateTime.Now.Year);
+                _Years.Add(DateTime.Now.Year);
             }
 
-            Years.Sort((d1, d2) => d1.CompareTo(d2));
-            return Years;
+            _Years.Sort((d1, d2) => d2.CompareTo(d1));
+            Years = _Years;
         }
 
         public static List<string> GetMonths()

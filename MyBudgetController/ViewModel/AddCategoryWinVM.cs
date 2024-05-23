@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace MyBudgetController.ViewModel
 {
-    public class AddCategoryWinVM : Base
+    public class AddCategoryWinVM : BaseVM
     {
 
         public CommandVM AddNewType { get; set; }

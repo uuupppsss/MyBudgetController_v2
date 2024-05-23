@@ -51,7 +51,7 @@
             <StackPanel Orientation="Horizontal">
 
                 <TextBlock Text="Год:" Margin="5"/>
-                <ComboBox ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" />
+                <ComboBox ItemsSource="{Binding Years, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedYear, UpdateSourceTrigger=PropertyChanged}"  />
 
 
                 <TextBlock Text="Месяц:" Margin="5"/>
@@ -69,7 +69,7 @@
         <TabControl Grid.Row="2" >
             <TabItem x:Name="Расходы" >
                 <TabItem.Header>
-                    <TextBlock Text="Расходы" Width="350"/>
+                    <TextBlock Text="Расходы" Width="350" Margin="10"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -85,7 +85,7 @@
                     <ListBox Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding ReportItems_E}" Margin="5,5,0,5" x:Name="VisualReportList_E" BorderBrush="{x:Null}" Background="{x:Null}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Margin="5">
                                     <Label Content="{Binding TypeName}" Width="155" FontSize="25"/>
                                     <Grid>
                                         <Rectangle Fill="#C0D9DF" Width="{Binding Percent,Converter={StaticResource width_converter}}" HorizontalAlignment="Left" Height="40"/>
@@ -104,7 +104,7 @@
                                 <StackPanel Orientation="Horizontal" Height="100">
                                     <Label Content="{Binding Type}" Height="50" FontSize="40"/>
                                     <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
-                                        <TextBlock >
+                                        <TextBlock Margin="10">
                                             <Hyperlink Foreground="#C0D9DF" CommandParameter="{Binding}"  Command="{Binding DataContext.InformCommand, 
 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >See more</Hyperlink>
                                     </TextBlock>
@@ -118,7 +118,7 @@ RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWind
             
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Доходы" Width="350"/>
+                    <TextBlock Text="Доходы" Width="350" Margin="10"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid>
@@ -135,7 +135,7 @@ RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWind
                         <ListBox Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding ReportItems_I}" Margin="5,5,0,5" x:Name="VisualReportList_I" BorderBrush="{x:Null}" Background="{x:Null}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal" Margin="5">
                                         <Label Content="{Binding TypeName}" Width="155" FontSize="25"/>
                                         <Grid>
                                             <Rectangle Fill="#C0D9DF" Width="{Binding Percent,Converter={StaticResource width_converter}}" HorizontalAlignment="Left" Height="40"/>
@@ -153,7 +153,7 @@ RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWind
                                     <StackPanel Orientation="Horizontal" Height="100">
                                         <Label Content="{Binding Type}" Height="50" FontSize="40"/>
                                         <Label Content="{Binding Sum,Converter={StaticResource value_converter}}" Height="50" FontSize="40"/>
-                                        <TextBlock >
+                                        <TextBlock Margin="10" >
                                             <Hyperlink Foreground="#C0D9DF" CommandParameter="{Binding}"  Command="{Binding DataContext.InformCommand, 
 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" >See more</Hyperlink>
                                         </TextBlock>

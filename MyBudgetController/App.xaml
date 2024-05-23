@@ -4,14 +4,14 @@
              xmlns:local="clr-namespace:MyBudgetController"
              StartupUri="View\SignInWin.xaml">
     <Application.Resources>
+
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Margin" Value="10"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Width" Value="Auto"/>
             <Setter Property="Height" Value="Auto"/>
         </Style>
-
+        
         <Style TargetType="TextBlock" x:Key="Fields">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Margin" Value="5"/>
@@ -160,6 +160,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        
 
     </Application.Resources>
 </Application>

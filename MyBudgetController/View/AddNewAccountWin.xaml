@@ -14,7 +14,7 @@
     <StackPanel>
         <TextBlock Text="Добавление нового счёта" FontFamily="Cooper Black" Foreground="#FF4E5254" HorizontalAlignment="Center"/>
         <TextBlock Text="Название" />
-        <TextBox Text="{Binding Name}"/>
+        <TextBox Text="{Binding Name}" FontSize="20"/>
         <TextBlock Text="Валюта"/>
         <ComboBox ItemsSource="{Binding Currencies}" SelectedItem="{Binding SelectedCurrency}"/>
         <Button Command="{Binding AddCommand}">

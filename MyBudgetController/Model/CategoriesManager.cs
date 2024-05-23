@@ -50,7 +50,7 @@ namespace MyBudgetController.Model
             }
         }
 
-        public event Action CategoryRemoved;
+        public event Action<Category> CategoryRemoved;
 
         public void GetCategory(string type)
         {
@@ -167,7 +167,7 @@ namespace MyBudgetController.Model
                         default:
                             MessageBox.Show("Error", "Error", MessageBoxButton.OK); return;
                     }
-                CategoryRemoved.Invoke();
+                CategoryRemoved.Invoke(category);
                 }
                 else MessageBox.Show("Error", "Error", MessageBoxButton.OK);
             

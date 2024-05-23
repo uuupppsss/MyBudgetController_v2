@@ -1,5 +1,8 @@
 ﻿using MySqlConnector;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 
 
@@ -21,6 +24,9 @@ namespace MyBudgetController.Model
         }
         public ObservableCollection<Operation> CurrentExpencesCollection { get; set; }  
         public ObservableCollection<Operation> CurrentIncomesCollection { get; set; }
+
+        public event Action ExpencesCollectionChanged;
+        public event Action IncomesCollectionChanged;
         public string CurrentOperationType {  get; set; }
 
         public int selected_year { get; set; }
@@ -139,18 +145,29 @@ namespace MyBudgetController.Model
                 command.Dispose();
                 operation.ID = int.Parse(result1.ToString());
                 filterManager.GetBalance();
+                if (!filterManager.Years.Contains(operation.Date.Year))
+                {
+                    filterManager.Years.Add(operation.Date.Year);
+                    List<int> y = new List<int>(filterManager.Years.OrderByDescending(d=>d));
+                    filterManager.Years = y;
+                }
+
+
                 bool ifDateMatch = operation.Date.Year == selected_year && (operation.Date.Month == selected_month || selected_month == 0);
                 if (ifDateMatch)
                 {
                     switch (operation.Type.Type)
                     {
                         case "Expences":
-                            CurrentExpencesCollection.Insert(0,operation);
-
+                            CurrentExpencesCollection.Add(operation);
+                            CurrentExpencesCollection = new ObservableCollection<Operation>(CurrentExpencesCollection.OrderByDescending(o => o.Date));
+                            ExpencesCollectionChanged.Invoke();
                             break;
                         case "Incomes":
-                            CurrentIncomesCollection.Insert(0, operation);
-                            break;
+                            CurrentIncomesCollection.Add(operation);
+                            CurrentIncomesCollection = new ObservableCollection<Operation>(CurrentIncomesCollection.OrderByDescending(o => o.Date));
+                            IncomesCollectionChanged.Invoke();
+                            break;               
                     }
                 }
 
@@ -179,8 +196,12 @@ namespace MyBudgetController.Model
                     filterManager.GetBalance();
                     switch (operation.Type.Type)
                     {
-                        case "Expences": CurrentExpencesCollection.Remove(operation); break;
-                        case "Incomes": CurrentIncomesCollection.Remove(operation); break;
+                        case "Expences": CurrentExpencesCollection.Remove(operation);
+                            ExpencesCollectionChanged.Invoke();
+                            break;
+                        case "Incomes": CurrentIncomesCollection.Remove(operation);
+                            ExpencesCollectionChanged.Invoke();
+                            break;
                     }
                     MessageBox.Show("Success", "Success", MessageBoxButton.OK);
                 }
@@ -218,17 +239,19 @@ namespace MyBudgetController.Model
                 string type= operation.Type.Type;
                 if (type == "Expences")
                 {
-                    index = CurrentExpencesCollection.IndexOf(CurrentOperation);
-                    CurrentExpencesCollection.Insert(index, operation);
                     CurrentExpencesCollection.Remove(CurrentOperation);
+                    CurrentExpencesCollection.Add(operation);
+                    CurrentExpencesCollection = new ObservableCollection<Operation>(CurrentExpencesCollection.OrderByDescending(o => o.Date));
+                    ExpencesCollectionChanged.Invoke();
                 }
 
 
                 if (type == "Incomes")
                 {
-                    index = CurrentIncomesCollection.IndexOf(CurrentOperation);
-                    CurrentIncomesCollection.Insert(index, operation);
                     CurrentIncomesCollection.Remove(CurrentOperation);
+                    CurrentIncomesCollection.Add(operation);
+                    CurrentIncomesCollection = new ObservableCollection<Operation>(CurrentIncomesCollection.OrderByDescending(o => o.Date));
+                    IncomesCollectionChanged.Invoke();
                 }
                 CurrentOperation = operation;
                 MessageBox.Show("Success", "Success", MessageBoxButton.OK);

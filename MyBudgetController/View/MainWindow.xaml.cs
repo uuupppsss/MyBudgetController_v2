@@ -24,5 +24,6 @@ namespace MyBudgetController.View
         {
             InitializeComponent();
         }
+
     }
 }

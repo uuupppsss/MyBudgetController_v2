@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyBudgetController.ViewModel
 {
-    public class Base : INotifyPropertyChanged
+    public class BaseVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -17,7 +17,5 @@ namespace MyBudgetController.ViewModel
             PropertyChanged?.Invoke(this,
                 new PropertyChangedEventArgs(prop));
         }
-
-
     }
 }

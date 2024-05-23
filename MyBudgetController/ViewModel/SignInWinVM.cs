@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class SignInWinVM : Base
+    public class SignInWinVM : BaseVM
     {
         UserManager umanager;
 

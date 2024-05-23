@@ -15,7 +15,7 @@
         <StackPanel Margin="10">
             <TextBlock Text="Добавление новой категории" FontFamily="Cooper Black" Foreground="#FF4E5254"/>
             <TextBlock Text="Название" />
-            <TextBox Text="{Binding Type}"/>
+            <TextBox Text="{Binding Type}" FontSize="20"/>
             <Button  Width="70" Height="60" BorderBrush="{x:Null}" Command="{Binding AddNewType}" Content="add" Foreground="Snow"/>
         </StackPanel>
         </Grid>

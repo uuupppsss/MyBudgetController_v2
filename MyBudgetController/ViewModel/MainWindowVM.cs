@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class MainWindowVM : Base
+    public class MainWindowVM : BaseVM
     {
         private List<string> _months;
         public List<string> Months
@@ -174,21 +174,24 @@ namespace MyBudgetController.ViewModel
             filterManager = FilterManager.Instance;
 
             categoriesManager.CategoryRemoved += CategoryRemoved;
-            filterManager.PropertyChanged += BalanceUpdate;
+            filterManager.BalanceUpdate += BalanceUpdate;
+            operationManager.IncomesCollectionChanged += IncomesCollectionChanged;
+            operationManager.ExpencesCollectionChanged += ExpencesCollectionChanged;
+            filterManager.YearsChanged += YearsUpdate;
 
 
             accountManager.GetAccounts();
-            Accounts=accountManager.Accounts;
-            SelectedAccount = Accounts[0];
-            accountManager.SelectedAccount = SelectedAccount;
-
-            Accounts.CollectionChanged += SelectedAccountChanged;
+            Accounts = accountManager.Accounts;
+            accountManager.SelectedAccount = Accounts[0];
 
             Months = FilterManager.GetMonths();
-            Years = FilterManager.GetYears();
+            filterManager.GetYears();
 
             SelectedYear = DateTime.Now.Year;
             SelectedMonth = Months[DateTime.Now.Month];
+
+            SelectedAccount = accountManager.SelectedAccount;
+            Accounts.CollectionChanged += SelectedAccountChanged;
 
             AddNewExpence = new CommandVM(() =>
             {
@@ -239,8 +242,33 @@ namespace MyBudgetController.ViewModel
                 accountManager.RemoveAccount();
                 SelectedAccount = Accounts[0];
 
-                DataUpdate();
+                operationManager.GetOperations("Expences");
+                operationManager.GetOperations("Incomes");
+                CollectionUpdate("Expences");
+                CollectionUpdate("Incomes");
+                filterManager.GetYears();
+                filterManager.GetBalance();
             });
+        }
+
+        private void YearsUpdate()
+        {
+            Years=filterManager.Years;
+        }
+
+        private void BalanceUpdate()
+        {
+            Balance=filterManager.Balance;
+        }
+
+        private void ExpencesCollectionChanged()
+        {
+            CollectionUpdate("Expences");
+        }
+
+        private void IncomesCollectionChanged()
+        {
+            CollectionUpdate("Incomes");
         }
 
         private void SelectedAccountChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -253,68 +281,66 @@ namespace MyBudgetController.ViewModel
             operationManager.CurrentOperation = null;
         }
 
-        private void CategoryRemoved()
+        private void CategoryRemoved(Category category)
         {
-            DataUpdate();
+            operationManager.GetOperations(category.Type);
+            CollectionUpdate(category.Type);
         }
 
-        private void ExpencesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
-        }
-
-        private void IncomesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
-        }
 
         private void FilterDateChanged()
         {
-            if (SelectedMonth == null || SelectedYear == 0)
+            if ( SelectedYear == 0)
                 return;
 
             operationManager.selected_month = Array.IndexOf(Months.ToArray(), SelectedMonth);
             operationManager.selected_year=SelectedYear;
+            operationManager.GetOperations("Expences");
+            operationManager.GetOperations("Incomes");
 
-            DataUpdate();
-
+            CollectionUpdate("Expences");
+            CollectionUpdate("Incomes");
         }
 
         private void AccountChanged()
         {
-            if (SelectedYear==0||SelectedMonth==null|| SelectedAccount==null)
+            if (SelectedYear==0||SelectedMonth==null)
                 return;
             accountManager.SelectedAccount = SelectedAccount;
-            DataUpdate();
-        }
+            filterManager.GetYears();
+            SelectedYear = DateTime.Now.Year;
+            SelectedMonth = Months[DateTime.Now.Month];
+            operationManager.selected_month = Array.IndexOf(Months.ToArray(), SelectedMonth);
+            operationManager.selected_year = SelectedYear;
 
-        private void DataUpdate()
-        {
             operationManager.GetOperations("Expences");
             operationManager.GetOperations("Incomes");
+            CollectionUpdate("Expences");
+            CollectionUpdate("Incomes");
 
-            FilteredCollection_E = operationManager.CurrentExpencesCollection; 
-            FilteredCollection_I = operationManager.CurrentIncomesCollection;
-
-            FilteredCollection_E.CollectionChanged += ExpencesCollection_CollectionChanged;
-            FilteredCollection_I.CollectionChanged += IncomesCollection_CollectionChanged;
-
-            ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
-            ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
-
-            Years = FilterManager.GetYears();
             filterManager.GetBalance();
+        }
+
+        private void CollectionUpdate(string type)
+        {
+
+            switch(type)
+            {
+                case "Expences":
+                    FilteredCollection_E = operationManager.CurrentExpencesCollection;
+                    ReportItems_E = FilterManager.GetReportItems(FilteredCollection_E);
+                    break;
+                case "Incomes":
+                    FilteredCollection_I = operationManager.CurrentIncomesCollection;
+                    ReportItems_I = FilterManager.GetReportItems(FilteredCollection_I);
+                    break;
+            }
         }
 
         private void OpenAddWin()
         {
             AddOperationWin addIWin = new AddOperationWin();
             addIWin.ShowDialog();
-        }
-
-        private void BalanceUpdate(object sender, EventArgs e)
-        {
-            Balance = filterManager.Balance;
         }
 
     }

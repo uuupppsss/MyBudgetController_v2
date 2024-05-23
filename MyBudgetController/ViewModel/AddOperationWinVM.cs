@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class AddOperationWinVM : Base
+    public class AddOperationWinVM : BaseVM
     {
         public string Name { get; set; }
         public double Sum { get; set; }

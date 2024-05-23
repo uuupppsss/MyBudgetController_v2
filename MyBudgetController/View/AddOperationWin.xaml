@@ -8,9 +8,11 @@
         mc:Ignorable="d"
         DataContext="{DynamicResource vm}"
         Title="AddOperationWin" Height="550" Width="500">
+    
     <Window.Resources>
         <vm:AddOperationWinVM x:Key="vm"/>
     </Window.Resources>
+
 
     <Grid >
         <Grid.ColumnDefinitions>
@@ -50,12 +52,12 @@
 
         <StackPanel Grid.Column="1" Grid.RowSpan="2" >
 
-            <TextBox Margin="5" Grid.Column="1" Text="{Binding Sum}"/>
+            <TextBox Margin="5" Grid.Column="1" Text="{Binding Sum}" FontSize="20"/>
 
             <ComboBox Margin="5" Grid.Column="1" Height="50" SelectedItem="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding OperationTypes}" />
 
-            <TextBox Margin="5" Grid.Column="1" Text="{Binding Name}"/>
-            <Viewbox Grid.Column="1" >
+            <TextBox Margin="5" Grid.Column="1" Text="{Binding Name}" FontSize="20"/>
+            <Viewbox Grid.Column="1" Height="300">
                 <Calendar  SelectedDate="{Binding Date}" />
             </Viewbox>
 

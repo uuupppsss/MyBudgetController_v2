@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace MyBudgetController.ViewModel
 {
-    public class InfoWinVM : Base
+    public class InfoWinVM : BaseVM
     {
         private string name;
         public string Name

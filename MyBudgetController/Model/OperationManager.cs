@@ -200,7 +200,7 @@ namespace MyBudgetController.Model
                             ExpencesCollectionChanged.Invoke();
                             break;
                         case "Incomes": CurrentIncomesCollection.Remove(operation);
-                            ExpencesCollectionChanged.Invoke();
+                            IncomesCollectionChanged.Invoke();
                             break;
                     }
                     MessageBox.Show("Success", "Success", MessageBoxButton.OK);
@@ -222,7 +222,6 @@ namespace MyBudgetController.Model
                 MessageBox.Show("Input sum", "Error", MessageBoxButton.OK);
                 return;
             }
-            int index;
             DBConnection dbConnection = DBConnection.Instance;
             FilterManager filterManager= FilterManager.Instance;
             string query0 = $"update Operations set Name=@Name, Date=@Date, type_id=@Type_id, Sum=@Sum where id={operation.ID} ";
@@ -237,22 +236,32 @@ namespace MyBudgetController.Model
             {
                 filterManager.GetBalance();
                 string type= operation.Type.Type;
-                if (type == "Expences")
-                {
-                    CurrentExpencesCollection.Remove(CurrentOperation);
-                    CurrentExpencesCollection.Add(operation);
-                    CurrentExpencesCollection = new ObservableCollection<Operation>(CurrentExpencesCollection.OrderByDescending(o => o.Date));
-                    ExpencesCollectionChanged.Invoke();
-                }
+
+                bool ifDateMatch = operation.Date.Year == selected_year && (operation.Date.Month == selected_month || selected_month == 0);
+
+                    switch(type)
+                    {
+                        case "Expences":
+                        CurrentExpencesCollection.Remove(CurrentOperation);
+                        if (ifDateMatch)
+                        {
+                            CurrentExpencesCollection.Add(operation);
+                            CurrentExpencesCollection = new ObservableCollection<Operation>(CurrentExpencesCollection.OrderByDescending(o => o.Date));
+                        }
+                        ExpencesCollectionChanged.Invoke();
+                            break;
 
 
-                if (type == "Incomes")
-                {
-                    CurrentIncomesCollection.Remove(CurrentOperation);
-                    CurrentIncomesCollection.Add(operation);
-                    CurrentIncomesCollection = new ObservableCollection<Operation>(CurrentIncomesCollection.OrderByDescending(o => o.Date));
-                    IncomesCollectionChanged.Invoke();
-                }
+                        case "Incomes":
+                        CurrentIncomesCollection.Remove(CurrentOperation);
+                        if (ifDateMatch)
+                        {
+                            CurrentIncomesCollection.Add(operation);
+                            CurrentIncomesCollection = new ObservableCollection<Operation>(CurrentIncomesCollection.OrderByDescending(o => o.Date));
+                        }
+                        IncomesCollectionChanged.Invoke();
+                            break;  
+                    }
                 CurrentOperation = operation;
                 MessageBox.Show("Success", "Success", MessageBoxButton.OK);
             }

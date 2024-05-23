@@ -213,7 +213,7 @@ namespace MyBudgetController.ViewModel
                     operationManager.CurrentOperationType = operationManager.CurrentOperation.Type.Type;
                     InfoWin win = new InfoWin();
                     win.Closed += UnsetCurrentOperation;
-                    win.Show();
+                    win.ShowDialog();
                 }
             });
 

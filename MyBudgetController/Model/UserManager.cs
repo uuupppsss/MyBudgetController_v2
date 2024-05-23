@@ -43,7 +43,7 @@ namespace MyBudgetController.Model
                 return false;
             }
             string pwd = HashClass.HashMethod(_pwd);
-            //string username=HashClass.HashMethod(_username);
+           //string username=HashClass.HashMethod(_username);
 
             string query = $"select id from Users where username='{username}' and password='{pwd}'";
             MySqlCommand command = new MySqlCommand(query, dbConnection.GetConnection());

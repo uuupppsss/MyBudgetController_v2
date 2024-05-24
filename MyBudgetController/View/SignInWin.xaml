@@ -16,10 +16,10 @@
             <TextBlock Text="Sign In" Margin="10" FontSize="36"  HorizontalAlignment="Center" FontFamily="Cooper Black" Foreground="#FF4E5254" />
 
             <Label Content="Логин" />
-            <TextBox x:Name="username_box" Text="{Binding Username,UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
+            <TextBox x:Name="username_box" Text="{Binding Username,UpdateSourceTrigger=PropertyChanged}" Margin="10" FontSize="20"/>
 
             <Label Content="Пароль" />
-            <PasswordBox x:Name="pwd_box" Height="40" Margin="10"/>
+            <PasswordBox x:Name="pwd_box" Height="40" Margin="10" FontSize="20"/>
 
             <Button Width="100" Margin="10"  Command="{Binding SignIn}" >
                 <Viewbox>
